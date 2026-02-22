@@ -1,0 +1,33 @@
+/* ─────────────────────────────────────────────────────────
+   Layout raíz — Envuelve todas las páginas
+   Incluye: metadata, estilos globales, Navbar y Footer
+   ───────────────────────────────────────────────────────── */
+import './globals.css'
+import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
+
+/* Metadatos de la página (SEO) */
+export const metadata = {
+  title: 'iNOTEC Engineering — Von der Idee zum Produkt',
+  description: 'Ganzheitliche Engineering-Prozesse von der ersten Konzeptidee bis hin zum fertigen Prototypen. Vakuumtechnik, Handlings-Systeme und innovative Gebrauchsgegenstände.',
+  keywords: 'Engineering, FEM, 3D, Vakuumtechnik, Autodesk Inventor, AutoCAD, Schweiz',
+}
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="de">
+      <body>
+        {/* Navegación fija — siempre visible */}
+        <Navbar />
+
+        {/* Contenido de cada página */}
+        <main>
+          {children}
+        </main>
+
+        {/* Pie de página */}
+        <Footer />
+      </body>
+    </html>
+  )
+}

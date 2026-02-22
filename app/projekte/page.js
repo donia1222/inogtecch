@@ -10,6 +10,7 @@ export const metadata = {
   description: 'Ausgewählte Projekte von iNOTEC: Vakuumanlagen, Drohnentechnologie, Fahrzeuge, Laboranlagen und mehr.',
 }
 
+
 export default async function ProjektePage() {
   const [projects, galleryImages] = await Promise.all([
     apiGet('projekte.php').catch(() => []),

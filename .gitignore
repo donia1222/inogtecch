@@ -11,6 +11,8 @@ out/
 .env.development.local
 .env.test.local
 .env.production.local
+apis/.env
+**/.env
 
 # OS
 .DS_Store

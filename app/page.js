@@ -9,13 +9,15 @@ import { apiGet } from '@/lib/api'
 export const revalidate = 60 // ISR: revalidar cada 60 s
 
 async function getHomeData() {
-  const [hero, ticker, erfahrung, companies, specialties] = await Promise.all([
+  const [hero, ticker, erfahrungRaw, companies, specialties] = await Promise.all([
     apiGet('hero.php').catch(() => null),
     apiGet('ticker.php').catch(() => []),
     apiGet('erfahrung.php').catch(() => null),
     apiGet('erfahrung_companies.php').catch(() => []),
     apiGet('erfahrung_specialties.php').catch(() => []),
   ])
+  // erfahrung.php devuelve { content:{...}, companies, specialties }
+  const erfahrung = erfahrungRaw?.content ?? erfahrungRaw
   return { hero, ticker, erfahrung, companies, specialties }
 }
 
@@ -132,13 +134,6 @@ export default async function HomePage() {
               {erfahrung?.text1 && <p className="text-block">{erfahrung.text1}</p>}
               {erfahrung?.text2 && <p className="text-block" dangerouslySetInnerHTML={{ __html: erfahrung.text2 }} />}
               {erfahrung?.text3 && <p className="text-block" dangerouslySetInnerHTML={{ __html: erfahrung.text3 }} />}
-              {erfahrung?.list_items && (
-                <ul className="pdf-list">
-                  {(Array.isArray(erfahrung.list_items) ? erfahrung.list_items : JSON.parse(erfahrung.list_items)).map((item, i) => (
-                    <li key={i}>{item}</li>
-                  ))}
-                </ul>
-              )}
               {erfahrung?.highlight_text && (
                 <div className="highlight-box">
                   <p dangerouslySetInnerHTML={{ __html: erfahrung.highlight_text }} />
@@ -211,6 +206,7 @@ export default async function HomePage() {
                 Ihre Kontaktaufnahme freut uns. Wir begleiten Ihr Projekt von der Idee bis zum
                 fertigen Produkt — individuell, kompetent und termingerecht.
               </p>
+
               {[
                 { icon: '📍', label: 'Adresse',  val: 'Bahnhofstrasse 2<br/>CH-9475 Sevelen, Schweiz', html: true },
                 { icon: '📞', label: 'Telefon',  val: '+41 / 81 756 74 55' },
@@ -229,6 +225,18 @@ export default async function HomePage() {
                   </div>
                 </div>
               ))}
+
+              <ul className="contact-services">
+                {[
+                  'Erstellung von Konzepten und Studien',
+                  'Konzept Realisierung bis hin zur Produktionszeichnung und Stückliste',
+                  'Erstellung von 3D Daten ab 2D Zeichnung',
+                  '3D Animationen und 3D Visualisierung',
+                  '3D Explosionszeichnungen',
+                  'FEM Berechnungen',
+                  'Auf Wunsch inklusive Prototypenproduktion und Vertrieb',
+                ].map(s => <li key={s}>{s}</li>)}
+              </ul>
             </div>
 
             <ContactForm />

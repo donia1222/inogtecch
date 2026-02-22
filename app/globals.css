@@ -412,6 +412,10 @@ nav {
 .contact-info > p { color:var(--muted);margin-bottom:2rem;line-height:1.75; }
 .c-detail { display:flex;align-items:flex-start;gap:1rem;padding:1.1rem 0;border-bottom:1px solid var(--border); }
 .c-detail:last-child { border-bottom:none; }
+.contact-cols { display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:start; }
+.contact-services { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:.7rem; }
+.contact-services li { font-size:.85rem; color:var(--muted); line-height:1.5; padding-left:1.1rem; position:relative; }
+.contact-services li::before { content:'•'; position:absolute; left:0; color:var(--red); font-weight:700; }
 .c-icon { width:40px;height:40px;border-radius:10px;background:rgba(224,32,32,.1);border:1px solid rgba(224,32,32,.2);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0; }
 .c-lbl { font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.2rem; }
 .c-val { font-size:.93rem;font-weight:600; }

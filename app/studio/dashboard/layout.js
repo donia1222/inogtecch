@@ -75,7 +75,7 @@ export default function DashboardLayout({ children }) {
       <main className="s-main">
         <div className="s-view-tabs">
           <Link href="/studio/dashboard" className={`s-view-tab${pathname === '/studio/dashboard' ? ' s-view-tab-active' : ''}`}>
-            ▦ Übersicht
+            𓃑  Übersicht
           </Link>
           <a href={previewMap[pathname] || '/'} target="_blank" rel="noopener noreferrer" className="s-view-tab">
             🌐 Website öffen

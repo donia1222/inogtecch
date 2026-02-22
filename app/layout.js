@@ -3,8 +3,8 @@
    Incluye: metadata, estilos globales, Navbar y Footer
    ───────────────────────────────────────────────────────── */
 import './globals.css'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
+import ConditionalNav    from '@/components/ConditionalNav'
+import ConditionalFooter from '@/components/ConditionalFooter'
 
 /* Metadatos de la página (SEO) */
 export const metadata = {
@@ -17,16 +17,16 @@ export default function RootLayout({ children }) {
   return (
     <html lang="de">
       <body>
-        {/* Navegación fija — siempre visible */}
-        <Navbar />
+        {/* Navbar — se oculta automáticamente en /studio/* */}
+        <ConditionalNav />
 
         {/* Contenido de cada página */}
         <main>
           {children}
         </main>
 
-        {/* Pie de página */}
-        <Footer />
+        {/* Footer — se oculta automáticamente en /studio/* */}
+        <ConditionalFooter />
       </body>
     </html>
   )

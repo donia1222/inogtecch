@@ -1,7 +1,8 @@
 /* ─────────────────────────────────────────────────────────
-   Página: 3D (Animation & Visualisierung & Explosionszeichnungen)
+   Página: 3D (conectada al API)
    ───────────────────────────────────────────────────────── */
 import FadeInObserver from '@/components/FadeInObserver'
+import { apiGet } from '@/lib/api'
 
 
 export const metadata = {
@@ -9,120 +10,90 @@ export const metadata = {
   description: '3D-Animationen, fotorealistische Visualisierungen und Explosionszeichnungen für technische Präsentationen und Produktvermarktung.',
 }
 
+export default async function ThreeDPage() {
+  const data = await apiGet('threed.php').catch(() => null)
+  const c = data?.content ?? {}
+  const images = data?.images ?? []
 
-export default function ThreeDPage() {
+  const heroMain   = images.find(i => i.type === 'hero_main')
+  const heroSmall  = images.filter(i => i.type === 'hero_small')
+  const bottomImgs = images.filter(i => i.type === 'bottom')
+
   return (
     <>
-      {/* ── SECCIÓN 3D ── */}
       <section id="threed" style={{ paddingTop: '140px' }}>
         <div className="container">
 
           {/* Encabezado */}
           <div className="fade-in">
-            <span className="tag">3D-Dienstleistungen</span>
+            <span className="tag">{c.page_tag ?? '3D-Dienstleistungen'}</span>
             <div className="divider"></div>
-            <h2 className="section-title">3D-Animation &amp; Visualisierung</h2>
-            <p className="section-sub">
-              Besonders im Maschinenbau und der technischen Industrie werden Funktionen immer komplexer.
-              Unsere 3D-Darstellungen schaffen klares Verständnis.
-            </p>
+            <h2 className="section-title">{c.page_title ?? '3D-Animation & Visualisierung'}</h2>
+            {c.page_sub && <p className="section-sub">{c.page_sub}</p>}
           </div>
 
-          {/* Fila superior: imagen grande + 3 imágenes pequeñas */}
+          {/* Fila superior: imagen grande + pequeñas */}
           <div className="threed-hero fade-in">
-            {/* Imagen principal: iNOTEC-EVO I */}
-            <div className="threed-main">
-              <img src="/assets/p4_img1.jpeg" alt="iNOTEC-EVO I" />
-              <div className="threed-overlay"></div>
-              <div className="threed-caption">
-                <h3>iNOTEC-EVO I</h3>
-                <p>3D-Visualisierung · Vakuumanlage</p>
+            {heroMain && (
+              <div className="threed-main">
+                <img src={heroMain.img_url} alt={heroMain.alt_text} />
+                <div className="threed-overlay"></div>
+                <div className="threed-caption">
+                  <h3>{heroMain.caption_h}</h3>
+                  <p>{heroMain.caption_p}</p>
+                </div>
               </div>
-            </div>
+            )}
 
-            {/* Grid de 3 imágenes pequeñas */}
             <div className="threed-small-grid">
-              <div className="threed-small">
-                <img src="/assets/p4_img2.jpeg" alt="iNO-flex 650" />
-                <div className="threed-small-overlay"></div>
-                <div className="threed-small-caption">
-                  <h4>iNO-flex 650</h4>
-                  <p>Rotation &amp; Revolution System</p>
+              {heroSmall.map((img, idx) => (
+                <div
+                  key={img.id}
+                  className="threed-small"
+                  style={idx === heroSmall.length - 1 ? { gridColumn: '1/-1' } : {}}
+                >
+                  <img
+                    src={img.img_url}
+                    alt={img.alt_text}
+                    style={idx === heroSmall.length - 1 ? { height: '150px' } : {}}
+                  />
+                  <div className="threed-small-overlay"></div>
+                  <div className="threed-small-caption">
+                    <h4>{img.caption_h}</h4>
+                    <p>{img.caption_p}</p>
+                  </div>
                 </div>
-              </div>
-              <div className="threed-small">
-                <img src="/assets/p3_img2.jpeg" alt="3D Explosion" />
-                <div className="threed-small-overlay"></div>
-                <div className="threed-small-caption">
-                  <h4>3D-Explosion</h4>
-                  <p>Baugruppenzerlegung</p>
-                </div>
-              </div>
-              {/* Imagen que ocupa todo el ancho */}
-              <div className="threed-small" style={{ gridColumn: '1/-1' }}>
-                <img src="/assets/p5_img1.jpeg" alt="Maschineninneres" style={{ height: '150px' }} />
-                <div className="threed-small-overlay"></div>
-                <div className="threed-small-caption">
-                  <h4>Maschinen-Visualisierung</h4>
-                  <p>Fotorealistische 3D-Darstellung</p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
 
-          {/* Fila inferior: 3 tarjetas con descripción */}
+          {/* Fila inferior: tarjetas */}
           <div className="threed-bottom fade-in">
-            <div className="threed-bottom-card">
-              <img src="/assets/p4_img3.jpeg" alt="iTEC-Sp5" />
-              <div className="cap">
-                <h4>3D-Animation</h4>
-                <p>Komplexe Sachverhalte animiert für Präsentation &amp; Vermarktung neuer Produkte.</p>
+            {bottomImgs.map((img) => (
+              <div key={img.id} className="threed-bottom-card">
+                <img src={img.img_url} alt={img.alt_text} />
+                <div className="cap">
+                  <h4>{img.caption_h}</h4>
+                  <p>{img.caption_p}</p>
+                </div>
               </div>
-            </div>
-            <div className="threed-bottom-card">
-              <img src="/assets/p3_img1.jpeg" alt="3D Explosion Komponente" />
-              <div className="cap">
-                <h4>3D-Explosionszeichnung</h4>
-                <p>Einzelteile räumlich getrennt dargestellt — für Montageanleitungen und Kataloge.</p>
-              </div>
-            </div>
-            <div className="threed-bottom-card">
-              <img src="/assets/p6_img1.jpeg" alt="Projektmanagement" />
-              <div className="cap">
-                <h4>3D-Visualisierung</h4>
-                <p>Realistischer Eindruck des geplanten Projekts auf Basis von CAD-Daten und Skizzen.</p>
-              </div>
-            </div>
+            ))}
           </div>
 
-          {/* ── TEXTO DETALLADO: Explosionszeichnung + Animation ── */}
+          {/* Texto detallado: Explosionszeichnung + Animation */}
           <div className="fade-in text-duo-grid">
 
-            {/* Columna izquierda: qué es una Explosionszeichnung */}
+            {/* Columna izquierda */}
             <div>
-              <span className="tag">3D Explosion — Technische Erklärung</span>
+              <span className="tag">{c.expl_tag ?? '3D Explosion — Technische Erklärung'}</span>
               <div className="divider"></div>
               <h3 style={{ fontSize: '1.35rem', fontWeight: 800, marginBottom: '1.2rem' }}>
-                Was ist eine Explosionszeichnung?
+                {c.expl_title ?? 'Was ist eine Explosionszeichnung?'}
               </h3>
-              <p style={{ color: 'var(--muted)', fontSize: '.93rem', lineHeight: 1.8, marginBottom: '1rem' }}>
-                Eine Explosionszeichnung (auch Explosionsgrafik, Explosivdarstellung) ist eine Art der Darstellung
-                bei Zeichnungen und Grafiken, die einen komplexen Gegenstand perspektivisch und in seine
-                Einzelteile zerlegt zeigt. Die dargestellten Einzelteile oder Bauteile sind räumlich voneinander
-                getrennt — so, als flögen sie nach einer Explosion auseinander.
-              </p>
-              <p style={{ color: 'var(--muted)', fontSize: '.93rem', lineHeight: 1.8, marginBottom: '1rem' }}>
-                Bei dieser Darstellungsweise wird das Wechselverhältnis des Ganzen zu seinen Teilen sowie
-                deren Lage verdeutlicht. Explosivdarstellungen erlauben es, die Funktion und den Zusammenbau
-                von Baugruppen darzustellen sowie einzelne Bauteile anhand angegebener Teilenummern zu
-                bestimmen.
-              </p>
-              <p style={{ color: 'var(--muted)', fontSize: '.93rem', lineHeight: 1.8 }}>
-                Diese Art der Darstellung findet in verschiedenen Bereichen Verwendung: als Informationsgrafik
-                in Gebrauchsanweisungen und Ersatzteil-Katalogen (auch virtuellen, interaktiven Katalogen).
-              </p>
+              {c.expl_text1 && <p style={{ color: 'var(--muted)', fontSize: '.93rem', lineHeight: 1.8, marginBottom: '1rem' }}>{c.expl_text1}</p>}
+              {c.expl_text2 && <p style={{ color: 'var(--muted)', fontSize: '.93rem', lineHeight: 1.8, marginBottom: '1rem' }}>{c.expl_text2}</p>}
+              {c.expl_text3 && <p style={{ color: 'var(--muted)', fontSize: '.93rem', lineHeight: 1.8 }}>{c.expl_text3}</p>}
 
-              {/* Grid de usos de Explosionszeichnungen */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '.7rem', marginTop: '1.5rem' }}>
                 {[
                   { label: 'Gebrauchsanweisungen', desc: 'Komplexe Produkte verständlich dokumentiert' },
@@ -138,39 +109,23 @@ export default function ThreeDPage() {
               </div>
             </div>
 
-            {/* Columna derecha: parámetros de la 3D Animation */}
+            {/* Columna derecha */}
             <div>
-              <span className="tag">3D-Animation &amp; Visualisierung — Vollständig</span>
+              <span className="tag">{c.anim_tag ?? '3D-Animation & Visualisierung — Vollständig'}</span>
               <div className="divider"></div>
               <h3 style={{ fontSize: '1.35rem', fontWeight: 800, marginBottom: '1.2rem' }}>
-                Parameter &amp; Möglichkeiten
+                {c.anim_title ?? 'Parameter & Möglichkeiten'}
               </h3>
-              <p style={{ color: 'var(--muted)', fontSize: '.93rem', lineHeight: 1.8, marginBottom: '1rem' }}>
-                Besonders im Maschinenbau und der technischen Industrie werden Funktionen und Prozesse
-                immer komplexer. Um diese Abläufe für den Laien, potenziellen Kunden oder den Facharbeiter
-                verständlicher zu machen, benötigt es aussagekräftige Darstellungen oder Animationen,
-                welche ein grundlegendes Verständnis schaffen.
-              </p>
-              <p style={{ color: 'var(--muted)', fontSize: '.93rem', lineHeight: 1.8, marginBottom: '1rem' }}>
-                3D-Animationen können komplexe Sachverhalte oder technische Zusammenhänge veranschaulichen
-                und verdeutlichen. Nach der Konstruktion des 3D-Modells erfolgt die Animation — dabei lassen
-                sich fast <strong style={{ color: 'var(--text)' }}>alle Parameter eines Objekts animieren</strong>.
-              </p>
-              <p style={{ color: 'var(--muted)', fontSize: '.93rem', lineHeight: 1.8, marginBottom: '1rem' }}>
-                Mit <strong style={{ color: 'var(--text)' }}>3D-Visualisierungen</strong> erhalten Sie im Voraus einen
-                realistischen Eindruck des geplanten Projekts. Als Grundlage können neben CAD-Daten auch
-                Pläne oder Skizzen übernommen und verarbeitet werden. Nach der Konstruktion werden die
-                Oberflächen bzw. Materialien, die Beleuchtung und die Kameraansichten definiert.
-                Korrekturen und Änderungen am Modell oder der Umgebung sind hier noch jederzeit möglich.
-                Ausgegeben werden hochauflösende Bilddateien zur weiteren Verarbeitung.
-              </p>
-
-              {/* Cita destacada */}
-              <div style={{ background: 'rgba(224,32,32,.07)', border: '1px solid rgba(224,32,32,.2)', borderRadius: '14px', padding: '1.3rem', marginTop: '1rem' }}>
-                <p style={{ color: 'var(--text)', fontSize: '.9rem', lineHeight: 1.7, fontWeight: 600 }}>
-                  "Diese beiden Anwendungen sind hervorragend für die Präsentation und Vermarktung neuer Produkte geeignet."
-                </p>
-              </div>
+              {c.anim_text1 && <p style={{ color: 'var(--muted)', fontSize: '.93rem', lineHeight: 1.8, marginBottom: '1rem' }}>{c.anim_text1}</p>}
+              {c.anim_text2 && <p style={{ color: 'var(--muted)', fontSize: '.93rem', lineHeight: 1.8, marginBottom: '1rem' }} dangerouslySetInnerHTML={{ __html: c.anim_text2 }} />}
+              {c.anim_text3 && <p style={{ color: 'var(--muted)', fontSize: '.93rem', lineHeight: 1.8, marginBottom: '1rem' }} dangerouslySetInnerHTML={{ __html: c.anim_text3 }} />}
+              {c.anim_quote && (
+                <div style={{ background: 'rgba(224,32,32,.07)', border: '1px solid rgba(224,32,32,.2)', borderRadius: '14px', padding: '1.3rem', marginTop: '1rem' }}>
+                  <p style={{ color: 'var(--text)', fontSize: '.9rem', lineHeight: 1.7, fontWeight: 600 }}>
+                    "{c.anim_quote}"
+                  </p>
+                </div>
+              )}
             </div>
 
           </div>
@@ -178,7 +133,6 @@ export default function ThreeDPage() {
         </div>
       </section>
 
-      {/* Activa las animaciones fade-in al hacer scroll */}
       <FadeInObserver />
     </>
   )

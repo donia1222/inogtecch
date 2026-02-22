@@ -3,6 +3,7 @@
    ───────────────────────────────────────────────────────── */
 import FadeInObserver from '@/components/FadeInObserver'
 
+
 export const metadata = {
   title: '3D Animation & Visualisierung — iNOTEC Engineering',
   description: '3D-Animationen, fotorealistische Visualisierungen und Explosionszeichnungen für technische Präsentationen und Produktvermarktung.',

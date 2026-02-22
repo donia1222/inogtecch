@@ -8,6 +8,7 @@ export const metadata = {
   description: '3D-Animationen, fotorealistische Visualisierungen und Explosionszeichnungen für technische Präsentationen und Produktvermarktung.',
 }
 
+
 export default function ThreeDPage() {
   return (
     <>

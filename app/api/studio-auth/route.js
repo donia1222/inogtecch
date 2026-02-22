@@ -6,6 +6,7 @@ import { cookies } from 'next/headers'
 const PASSWORD   = process.env.ADMIN_PASSWORD || ''
 const API_SECRET = process.env.API_SECRET     || ''
 
+
 // ── GET — verificar sesión activa ─────────────────────────
 export async function GET() {
   const cookieStore = await cookies()

@@ -2,6 +2,7 @@
    Footer — Pie de página
    Componente de servidor (sin hooks)
    ───────────────────────────────────────────────────────── */
+import FooterModals from '@/components/FooterModals'
 
 export default function Footer() {
   return (
@@ -22,6 +23,7 @@ export default function Footer() {
           <div className="footer-links">
             <a href="mailto:inotec-inotec@bluewin.ch">E-Mail</a>
             <a href="tel:+41817567455">Telefon</a>
+            <FooterModals />
             <a href="/#hero">↑ Top</a>
           </div>
         </div>

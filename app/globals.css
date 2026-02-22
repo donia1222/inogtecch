@@ -437,6 +437,102 @@ footer { background:var(--dark);border-top:1px solid var(--border);padding:2.5re
 .footer-links a { font-size:.78rem;color:var(--muted);transition:color .2s; }
 .footer-links a:hover { color:var(--red2); }
 
+/* ── COOKIE BANNER ── */
+.cookie-bar {
+  position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+  z-index: 9998; display: flex; align-items: center; gap: 1.2rem;
+  background: var(--dark3); border: 1px solid var(--border);
+  border-radius: 14px; padding: .85rem 1.2rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,.45);
+  backdrop-filter: blur(12px); max-width: 92vw;
+  animation: cookie-in .4s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes cookie-in {
+  from { opacity:0; transform: translateX(-50%) translateY(20px); }
+  to   { opacity:1; transform: translateX(-50%) translateY(0); }
+}
+.cookie-text { font-size: .8rem; color: var(--muted); line-height: 1.5; white-space: nowrap; }
+@media(max-width:600px){ .cookie-text { white-space: normal; } }
+.cookie-link {
+  background: none; border: none; padding: 0; cursor: pointer;
+  font-size: .8rem; color: var(--red2); text-decoration: underline;
+  font-family: inherit;
+}
+.cookie-link:hover { color: var(--red); }
+.cookie-btn {
+  background: var(--red); color: #fff; border: none;
+  border-radius: 8px; padding: .45rem 1rem;
+  font-size: .78rem; font-weight: 700; cursor: pointer;
+  white-space: nowrap; transition: background .2s;
+  font-family: inherit; flex-shrink: 0;
+}
+.cookie-btn:hover { background: var(--red2); }
+html.day .cookie-bar { box-shadow: 0 4px 24px var(--shadow); }
+
+/* ── FOOTER LEGAL BUTTONS ── */
+.footer-legal-btn {
+  background: none; border: none; cursor: pointer;
+  font-size: .78rem; color: var(--muted);
+  transition: color .2s; padding: 0; font-family: inherit;
+}
+.footer-legal-btn:hover { color: var(--red2); }
+
+/* ── MODALES LEGALES ── */
+.legal-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,.72); backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.5rem;
+}
+.legal-modal {
+  background: var(--dark3); border: 1px solid var(--border);
+  border-radius: 20px; width: 100%; max-width: 680px;
+  max-height: 88vh; display: flex; flex-direction: column;
+  overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,.6);
+}
+.legal-modal-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.5rem 1.8rem; border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.legal-modal-header h2 {
+  font-size: 1.1rem; font-weight: 800; margin: 0;
+  background: linear-gradient(135deg, #fff 0%, var(--red2) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.legal-close {
+  background: var(--glass2); border: 1px solid var(--border);
+  border-radius: 8px; width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: .8rem; color: var(--muted);
+  transition: all .2s; flex-shrink: 0;
+}
+.legal-close:hover { border-color: var(--red); color: var(--red2); }
+.legal-modal-body {
+  padding: 1.8rem; overflow-y: auto; flex: 1;
+}
+.legal-modal-body h3 {
+  font-size: .78rem; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--red2);
+  margin: 1.6rem 0 .5rem;
+}
+.legal-modal-body h3:first-of-type { margin-top: 0; }
+.legal-modal-body p {
+  font-size: .88rem; color: var(--muted); line-height: 1.8; margin: 0 0 .5rem;
+}
+.legal-modal-body strong { color: var(--text); }
+.legal-intro {
+  background: var(--glass); border: 1px solid var(--border);
+  border-left: 3px solid var(--red); border-radius: 10px;
+  padding: 1rem 1.2rem; margin-bottom: 1.5rem !important;
+}
+.legal-date { font-size: .75rem !important; color: rgba(138,143,168,.6) !important; margin-top: 1.5rem !important; }
+
+/* Day mode overrides for modals */
+html.day .legal-modal { background: var(--dark2); }
+html.day .legal-modal-header h2 { -webkit-text-fill-color: unset; background: none; color: var(--text); }
+html.day .legal-close { background: rgba(255,255,255,.7); }
+
 /* ── ANIMACIÓN FADE-IN (scroll reveal) ── */
 .fade-in { opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease; }
 .fade-in.visible { opacity:1;transform:translateY(0); }

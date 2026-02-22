@@ -11,12 +11,12 @@ import { usePathname } from 'next/navigation'
 export default function Navbar() {
   const pathname = usePathname()
 
-  const [isDay, setIsDay] = useState(false)
+  const [isDay, setIsDay] = useState(true)
   const [menuOpen, setMenuOpen] = useState(false)
 
   /* ── Aplicar tema guardado al montar ── */
   useEffect(() => {
-    const saved = localStorage.getItem('theme') === 'day'
+    const saved = localStorage.getItem('theme') !== 'night'  // día por defecto
     setIsDay(saved)
     applyTheme(saved)
   }, [])

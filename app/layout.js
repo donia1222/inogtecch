@@ -5,6 +5,7 @@
 import './globals.css'
 import ConditionalNav    from '@/components/ConditionalNav'
 import ConditionalFooter from '@/components/ConditionalFooter'
+import CookieBanner      from '@/components/CookieBanner'
 
 /* Metadatos de la página (SEO) */
 export const metadata = {
@@ -27,6 +28,9 @@ export default function RootLayout({ children }) {
 
         {/* Footer — se oculta automáticamente en /studio/* */}
         <ConditionalFooter />
+
+        {/* Aviso de cookies */}
+        <CookieBanner />
       </body>
     </html>
   )

@@ -10,11 +10,15 @@ $allowed = array_map('trim', explode(',', ALLOWED_ORIGINS));
 
 if (in_array($origin, $allowed, true)) {
     header('Access-Control-Allow-Origin: ' . $origin);
-} else {
-    // En desarrollo permite cualquier localhost
-    if (preg_match('/^https?:\/\/localhost(:\d+)?$/', $origin)) {
-        header('Access-Control-Allow-Origin: ' . $origin);
-    }
+} else if (preg_match('/^https?:\/\/localhost(:\d+)?$/', $origin)) {
+    // Desarrollo local
+    header('Access-Control-Allow-Origin: ' . $origin);
+} else if (preg_match('/^https:\/\/[a-z0-9-]+\.vercel\.app$/', $origin)) {
+    // Vercel deployments
+    header('Access-Control-Allow-Origin: ' . $origin);
+} else if (preg_match('/^https?:\/\/(www\.)?inotecengineering\.ch$/', $origin)) {
+    // Dominio principal
+    header('Access-Control-Allow-Origin: ' . $origin);
 }
 
 header('Access-Control-Allow-Credentials: true');

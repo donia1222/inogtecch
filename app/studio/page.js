@@ -8,7 +8,13 @@ export default function StudioLoginPage() {
   const [password, setPassword] = useState('')
   const [error, setError]       = useState('')
   const [loading, setLoading]   = useState(false)
+  const [light, setLight]       = useState(true)
   const router = useRouter()
+
+  useEffect(() => {
+    const saved = localStorage.getItem('studio_theme2')
+    setLight(saved !== 'dark')
+  }, [])
 
   // Si ya hay sesión activa, ir al dashboard
   useEffect(() => {
@@ -17,6 +23,12 @@ export default function StudioLoginPage() {
       .then(d => { if (d.authenticated) router.push('/studio/dashboard') })
       .catch(() => {})
   }, [])
+
+  function toggleTheme() {
+    const next = !light
+    setLight(next)
+    localStorage.setItem('studio_theme2', next ? 'light' : 'dark')
+  }
 
   async function handleLogin(e) {
     e.preventDefault()
@@ -42,24 +54,33 @@ export default function StudioLoginPage() {
     }
   }
 
+  const bg    = light ? '#f4f5f7' : '#0a0a0a'
+  const card  = light ? '#ffffff' : '#111'
+  const bord  = light ? '#e0e3e8' : '#1e1e1e'
+  const title = light ? '#1a1a1a' : '#f0f0f0'
+
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: '#0a0a0a',
-      padding: '1rem',
-    }}>
-      <div style={{
-        width: '100%', maxWidth: '360px',
-        background: '#111',
-        border: '1px solid #1e1e1e',
-        borderRadius: '14px',
-        padding: '2.4rem',
-      }}>
+    <div data-lm={light ? 'light' : undefined} style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: bg, padding: '1rem', position: 'relative' }}>
+
+      {/* Toggle tema */}
+      <button
+        onClick={toggleTheme}
+        style={{
+          position: 'fixed', top: '1rem', right: '1rem',
+          background: light ? '#e8eaf0' : '#1a1f2e',
+          border: `1px solid ${light ? '#d0d5e0' : '#2a3147'}`,
+          borderRadius: '8px', padding: '.4rem .7rem',
+          cursor: 'pointer', fontSize: '1rem',
+          color: light ? '#4a5568' : '#a0aec0',
+          transition: 'all .15s',
+        }}
+      >
+        {light ? '🌙' : '☀️'}
+      </button>
+
+      <div style={{ width: '100%', maxWidth: '360px', background: card, border: `1px solid ${bord}`, borderRadius: '14px', padding: '2.4rem' }}>
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <strong style={{ display: 'block', fontSize: '1.4rem', fontWeight: 900, color: '#f0f0f0' }}>
+          <strong style={{ display: 'block', fontSize: '1.4rem', fontWeight: 900, color: title }}>
             iNOTEC
           </strong>
           <span style={{ fontSize: '.68rem', fontWeight: 700, letterSpacing: '.15em', textTransform: 'uppercase', color: '#e02020' }}>

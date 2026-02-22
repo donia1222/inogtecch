@@ -13,7 +13,6 @@ const sections = [
   { href: '/studio/dashboard/referenzen', icon: '🏆', title: 'Referenzen',           desc: '24 Kunden-Logos & 6 Partner' },
   { href: '/studio/dashboard/3d',         icon: '🖥️', title: '3D & Visualisierung',  desc: 'Texte & Bilder der 3D-Seite' },
   { href: '/studio/dashboard/fem',        icon: '📊', title: 'FEM',                  desc: 'FEM-Inhalt & Vorteilsliste' },
-  { href: '/studio/dashboard/nachrichten',icon: '✉️', title: 'Nachrichten',          desc: 'Kontaktformular-Eingänge lesen' },
 ]
 
 export default function DashboardPage() {
@@ -35,11 +34,7 @@ export default function DashboardPage() {
             <div className="s-overview-card-desc">{desc}</div>
           </Link>
         ))}
-        <a href="/" target="_blank" rel="noopener noreferrer" className="s-overview-card" style={{ borderColor: '#2a1a1a' }}>
-          <div className="s-overview-card-icon">↗</div>
-          <div className="s-overview-card-title" style={{ color: '#e02020' }}>Website öffnen</div>
-          <div className="s-overview-card-desc">Seite in neuem Tab anzeigen</div>
-        </a>
+
       </div>
     </>
   )

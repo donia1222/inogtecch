@@ -31,6 +31,18 @@ export default function DashboardLayout({ children }) {
   const router   = useRouter()
   const pathname = usePathname()
   const [unread, setUnread] = useState(0)
+  const [light, setLight]   = useState(true)   // por defecto: modo día
+
+  useEffect(() => {
+    const saved = localStorage.getItem('studio_theme2')
+    setLight(saved !== 'dark')   // si no hay preferencia → día
+  }, [])
+
+  function toggleTheme() {
+    const next = !light
+    setLight(next)
+    localStorage.setItem('studio_theme2', next ? 'light' : 'dark')
+  }
 
   // Al cargar: obtener token desde Next.js → guardarlo → luego llamar PHP
   useEffect(() => {
@@ -58,64 +70,25 @@ export default function DashboardLayout({ children }) {
   }
 
   return (
-    <div className="s-wrap">
-      {/* Sidebar */}
-      <aside className="s-sidebar">
-        <div className="s-logo">
-          <strong>iNOTEC</strong>
-          <span>Studio</span>
-          <a
-            href={previewMap[pathname] || '/'}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '.25rem', marginTop: '.5rem', fontSize: '.72rem', color: '#555', textDecoration: 'none', transition: 'color .15s' }}
-            onMouseEnter={e => e.currentTarget.style.color = '#e02020'}
-            onMouseLeave={e => e.currentTarget.style.color = '#555'}
-          >
-            Website ↗
-          </a>
-        </div>
-
-        <nav className="s-nav">
-          <div className="s-nav-section">Webseite</div>
-          {navLinks.map(({ href, icon, label }) => (
-            <Link key={href} href={href} className={isActive(href) ? 's-active' : ''}>
-              <span className="s-nav-icon">{icon}</span>
-              {label}
-            </Link>
-          ))}
-
-          <div className="s-nav-section">Verwaltung</div>
-          <Link
-            href="/studio/dashboard/nachrichten"
-            className={isActive('/studio/dashboard/nachrichten') ? 's-active' : ''}
-          >
-            <span className="s-nav-icon">✉️</span>
-            Nachrichten
-            {unread > 0 && <span className="s-nav-badge">{unread}</span>}
-          </Link>
-
-          <div className="s-nav-section">Web</div>
-          <a
-            href={previewMap[pathname] || '/'}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ display: 'flex', alignItems: 'center', gap: '.55rem', padding: '.55rem 1.4rem', color: '#777', textDecoration: 'none', fontSize: '.83rem', borderLeft: '2px solid transparent' }}
-            onMouseEnter={e => e.currentTarget.style.color = '#e0e0e0'}
-            onMouseLeave={e => e.currentTarget.style.color = '#777'}
-          >
-            <span className="s-nav-icon">↗</span>
-            Website öffnen
-          </a>
-        </nav>
-
-        <div className="s-sidebar-footer">
-          <button onClick={handleLogout}>← Abmelden</button>
-        </div>
-      </aside>
-
+    <div className="s-wrap" data-lm={light ? 'light' : undefined}>
       {/* Contenido principal */}
       <main className="s-main">
+        <div className="s-view-tabs">
+          <Link href="/studio/dashboard" className={`s-view-tab${pathname === '/studio/dashboard' ? ' s-view-tab-active' : ''}`}>
+            ▦ Übersicht
+          </Link>
+          <a href={previewMap[pathname] || '/'} target="_blank" rel="noopener noreferrer" className="s-view-tab">
+            🌐 Website öffen
+          </a>
+          <div className="s-tabs-right">
+            <button onClick={toggleTheme} className="s-view-tab">
+              {light ? '🌙' : '☀️'}
+            </button>
+            <button onClick={handleLogout} className="s-view-tab s-view-tab-logout">
+              ⏻
+            </button>
+          </div>
+        </div>
         {children}
       </main>
     </div>

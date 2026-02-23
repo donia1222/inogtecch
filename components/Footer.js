@@ -24,7 +24,8 @@ export default function Footer() {
             <a href="mailto:inotec-inotec@bluewin.ch">E-Mail</a>
             <a href="tel:+41817567455">Telefon</a>
             <FooterModals />
-            <a href="/#hero">↑ Top</a>
+            <a href="/studio">Admin</a>
+            <a href="https://lweb.ch" target="_blank" rel="noopener noreferrer" style={{ opacity: .45, fontSize: '.72rem' }}>Design: lweb.ch</a>
           </div>
         </div>
       </div>

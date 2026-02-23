@@ -16,7 +16,7 @@ export default function Navbar() {
 
   /* ── Aplicar tema guardado al montar ── */
   useEffect(() => {
-    const saved = localStorage.getItem('theme') !== 'night'  // día por defecto
+    const saved = localStorage.getItem('theme') === 'day'  // noche por defecto
     setIsDay(saved)
     applyTheme(saved)
   }, [])
@@ -63,6 +63,7 @@ export default function Navbar() {
   }
 
   const navLinks = [
+    { href: '/',           label: 'Home' },
     { href: '/leistungen', label: 'Leistungen' },
     { href: '/fem',        label: 'FEM' },
     { href: '/3d',         label: '3D' },
@@ -92,26 +93,37 @@ export default function Navbar() {
           <Link href="/#contact" className="nav-cta">Kontakt</Link>
 
           {/* Botón tema */}
-          <button className="theme-toggle" onClick={toggleTheme} title="Modus wechseln">
-            <span id="toggleLabel">{isDay ? 'Nachtmodus' : 'Tagmodus'}</span>
-            <div className="toggle-track">
-              <div className="toggle-thumb">
-                <span className="toggle-icon">{isDay ? '☀️' : '🌙'}</span>
-              </div>
-            </div>
+          <button className="theme-toggle-desktop" onClick={toggleTheme} title="Modus wechseln" aria-label="Modus wechseln">
+            {isDay
+              ? <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            }
           </button>
         </div>
 
-        {/* Botón hamburger — solo visible en móvil */}
-        <button
-          className={`hamburger${menuOpen ? ' open' : ''}`}
-          onClick={() => setMenuOpen(v => !v)}
-          aria-label="Menü öffnen"
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+        {/* Controles móvil: tema + hamburger */}
+        <div className="mobile-controls">
+          {menuOpen && (
+            <button
+              className="theme-toggle-icon"
+              onClick={toggleTheme}
+              title="Modus wechseln"
+              aria-label="Modus wechseln"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            </button>
+          )}
+
+          <button
+            className={`hamburger${menuOpen ? ' open' : ''}`}
+            onClick={() => setMenuOpen(v => !v)}
+            aria-label="Menü öffnen"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
       </nav>
 
       {/* Panel móvil */}
@@ -125,15 +137,6 @@ export default function Navbar() {
           <Link href="/#contact" className="mobile-link mobile-cta" onClick={() => setMenuOpen(false)}>
             Kontakt
           </Link>
-          {/* Tema en móvil */}
-          <button className="theme-toggle mobile-theme" onClick={toggleTheme}>
-            <span>{isDay ? 'Nachtmodus' : 'Tagmodus'}</span>
-            <div className="toggle-track">
-              <div className="toggle-thumb">
-                <span className="toggle-icon">{isDay ? '☀️' : '🌙'}</span>
-              </div>
-            </div>
-          </button>
         </div>
       </div>
 

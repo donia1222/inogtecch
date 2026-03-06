@@ -77,10 +77,10 @@ export default function Navbar() {
       <nav>
         {/* Logo */}
         <div className="nav-logo">
-          <Link href="/" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '1px' }}>
+          <Link href="/" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '.6rem' }}>
             <img src="/assets/p1_img4.png" alt="iNOTEC" style={{ height: '30px', objectFit: 'contain' }} />
-            <span style={{ fontSize: '.62rem', fontWeight: 500, color: 'var(--muted)', letterSpacing: '.18em', textTransform: 'uppercase', fontStyle: 'italic', paddingLeft: '.1rem', lineHeight: 1 }}>
-              Engineering
+            <span style={{ display: 'inline-flex', alignItems: 'flex-start', gap: '0', fontSize: '12px', fontWeight: 600, color: 'var(--muted)', letterSpacing: '.25em', textTransform: 'uppercase', lineHeight: 1, fontFamily: "'Separat', sans-serif" }}>
+              <span style={{ color: 'var(--red)', fontSize: '10px', lineHeight: '0.7', marginRight: '1px' }}>&#9660;</span>ENGINEERING
             </span>
           </Link>
         </div>

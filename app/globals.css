@@ -3,6 +3,14 @@
    Copiado exactamente del HTML original y organizado por sección
    ───────────────────────────────────────────────────────── */
 
+@font-face {
+  font-family: 'Separat';
+  src: url('/fonts/separat.woff2') format('woff2'),
+       url('/fonts/separat.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 /* ── MODO NOCHE (por defecto) ── */

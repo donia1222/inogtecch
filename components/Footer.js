@@ -10,8 +10,11 @@ export default function Footer() {
       <div className="container">
         <div className="footer-inner">
           {/* Logo en texto */}
-          <div className="footer-logo">
-            <span className="i">iNO</span>TEC-Engineering
+          <div className="footer-logo" style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
+            <span style={{ color: 'var(--red)' }}>iNOTEC</span>
+            <span style={{ display: 'inline-flex', alignItems: 'flex-start', gap: '0', fontSize: '11px', fontWeight: 600, color: 'var(--muted)', letterSpacing: '.25em', textTransform: 'uppercase', lineHeight: 1, fontFamily: "'Separat', sans-serif" }}>
+              <span style={{ color: 'var(--red)', fontSize: '9px', lineHeight: '0.7', marginRight: '1px' }}>&#9660;</span>ENGINEERING
+            </span>
           </div>
 
           {/* Información de copyright */}

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { checkAuth, apiGet, apiPost, apiPut, apiDelete } from '@/lib/api'
-import { useToast, Toast, Modal, Field, Input, Textarea, Row, ImgUpload, EditBtn, DelBtn, AddBtn, VisualCard, SectionHeader } from '@/app/studio/ve'
+import { useToast, Toast, Modal, Field, Input, Textarea, Row, ImgUpload, EditBtn, DelBtn, AddBtn, VisualCard, SectionHeader, FieldStylesProvider } from '@/app/studio/ve'
 
 /* ── Inhalt Tab ─────────────────────────────────────── */
 function InhaltTab() {
@@ -55,8 +55,8 @@ function InhaltTab() {
             <div style={{ fontSize: '.65rem', color: '#e02020', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.1em', marginBottom: '.5rem' }}>{data.tag}</div>
             <div style={{ fontWeight: 800, fontSize: '1.1rem', color: '#fff', lineHeight: 1.4 }}>{data.title}</div>
           </div>
-          <Field label="Tag"><Input value={data.tag} onChange={e => set('tag', e.target.value)} /></Field>
-          <Field label="Titel"><Input value={data.title} onChange={e => set('title', e.target.value)} /></Field>
+          <Field label="Tag" styleKey="fem.tag"><Input value={data.tag} onChange={e => set('tag', e.target.value)} /></Field>
+          <Field label="Titel" styleKey="fem.title"><Input value={data.title} onChange={e => set('title', e.target.value)} /></Field>
         </div>
       </div>
 
@@ -65,7 +65,7 @@ function InhaltTab() {
         <SectionHeader title="Textabsätze" />
         {['text1', 'text2', 'text3', 'text4'].map((f, i) => (
           <div key={f} style={{ marginBottom: '1rem' }}>
-            <Field label={`Absatz ${i + 1}`}>
+            <Field label={`Absatz ${i + 1}`} styleKey={`fem.${f}`}>
               <Textarea value={data[f] || ''} onChange={e => set(f, e.target.value)} rows={4} />
             </Field>
           </div>
@@ -74,7 +74,7 @@ function InhaltTab() {
 
       <button onClick={save} disabled={saving} style={{
         padding: '.8rem 2rem', borderRadius: '9px', border: 'none',
-        background: '#e02020', color: '#fff', fontWeight: 700, fontSize: '.9rem',
+        background: '#e02020', color: '#fff', fontWeight: 700, fontSize: '.95rem',
         cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? .6 : 1,
       }}>{saving ? 'Wird gespeichert…' : 'Alles speichern'}</button>
     </>
@@ -138,7 +138,7 @@ function VorteileTab() {
         <input value={newTxt} onChange={e => setNewTxt(e.target.value)} onKeyDown={e => e.key === 'Enter' && add()}
           placeholder="Neuer Vorteil… (Enter zum Hinzufügen)"
           className="ve-input" style={{ flex: 1, background: '#0d0d0d', border: '1px solid #222', borderRadius: '9px', padding: '.7rem 1rem', color: '#fff', fontSize: '.88rem', outline: 'none' }} />
-        <button onClick={add} style={{ padding: '.7rem 1.2rem', borderRadius: '9px', border: 'none', background: '#e02020', color: '#fff', fontWeight: 700, cursor: 'pointer' }}>+ Hinzufügen</button>
+        <button onClick={add} style={{ padding: '.7rem 1.2rem', borderRadius: '9px', border: 'none', background: '#e02020', color: '#fff', fontWeight: 700, fontSize: '.95rem', cursor: 'pointer' }}>+ Hinzufügen</button>
       </div>
 
       {/* Edit modal */}
@@ -159,6 +159,7 @@ export default function FEMEditorPage() {
   useEffect(() => { checkAuth().then(ok => { if (!ok) router.push('/studio') }) }, [])
 
   return (
+    <FieldStylesProvider>
     <div style={{ maxWidth: '950px' }}>
       <h1 className="s-page-title">FEM</h1>
       <p className="s-page-sub">FEM-Seiteninhalt und Vorteilsliste — visuell bearbeiten</p>
@@ -170,5 +171,6 @@ export default function FEMEditorPage() {
       {tab === 'inhalt'   && <InhaltTab />}
       {tab === 'vorteile' && <VorteileTab />}
     </div>
+    </FieldStylesProvider>
   )
 }

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { checkAuth, apiGet, apiPost, apiPut, apiDelete } from '@/lib/api'
-import { useToast, Toast, Modal, Field, Input, Textarea, Row, EditBtn, DelBtn, AddBtn, VisualCard, SectionHeader } from '@/app/studio/ve'
+import { useToast, Toast, Modal, Field, Input, Textarea, Row, EditBtn, DelBtn, AddBtn, VisualCard, SectionHeader, FieldStylesProvider } from '@/app/studio/ve'
 
 const empty = { icon: '', title: '', desc_text: '' }
 
@@ -51,6 +51,7 @@ export default function LeistungenEditorPage() {
   }
 
   return (
+    <FieldStylesProvider>
     <div style={{ maxWidth: '900px' }}>
       <Toast {...toast} />
       <h1 className="s-page-title">Leistungen</h1>
@@ -87,15 +88,16 @@ export default function LeistungenEditorPage() {
             <Field label="Icon (Emoji)">
               <Input value={modal.data.icon} onChange={e => set('icon', e.target.value)} placeholder="💡" />
             </Field>
-            <Field label="Titel">
+            <Field label="Titel" styleKey="leistungen.title">
               <Input value={modal.data.title} onChange={e => set('title', e.target.value)} placeholder="Konzepte & Studien" />
             </Field>
           </Row>
-          <Field label="Beschreibung">
+          <Field label="Beschreibung" styleKey="leistungen.desc">
             <Textarea value={modal.data.desc_text} onChange={e => set('desc_text', e.target.value)} rows={4} placeholder="Kurze Beschreibung der Leistung…" />
           </Field>
         </>}
       </Modal>
     </div>
+    </FieldStylesProvider>
   )
 }

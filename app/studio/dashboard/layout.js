@@ -31,20 +31,9 @@ export default function DashboardLayout({ children }) {
   const router   = useRouter()
   const pathname = usePathname()
   const [unread, setUnread] = useState(0)
-  const [light, setLight]   = useState(true)   // por defecto: modo día
+  const [showNews, setShowNews] = useState(false)
+  const light = true
 
-  useEffect(() => {
-    const saved = localStorage.getItem('studio_theme2')
-    setLight(saved !== 'dark')   // si no hay preferencia → día
-  }, [])
-
-  function toggleTheme() {
-    const next = !light
-    setLight(next)
-    localStorage.setItem('studio_theme2', next ? 'light' : 'dark')
-  }
-
-  // Al cargar: obtener token desde Next.js → guardarlo → luego llamar PHP
   useEffect(() => {
     fetch('/api/studio-auth')
       .then(r => r.json())
@@ -56,6 +45,11 @@ export default function DashboardLayout({ children }) {
         if (Array.isArray(msgs)) setUnread(msgs.filter(m => !parseInt(m.is_read)).length)
       })
       .catch(() => {})
+
+    if (!localStorage.getItem('studio_news_seen')) {
+      setShowNews(true)
+      localStorage.setItem('studio_news_seen', '1')
+    }
   }, [])
 
   async function handleLogout() {
@@ -71,7 +65,6 @@ export default function DashboardLayout({ children }) {
 
   return (
     <div className="s-wrap" data-lm={light ? 'light' : undefined}>
-      {/* Contenido principal */}
       <main className="s-main">
         <div className="s-view-tabs">
           <Link href="/studio/dashboard" className={`s-view-tab${pathname === '/studio/dashboard' ? ' s-view-tab-active' : ''}`}>
@@ -81,8 +74,8 @@ export default function DashboardLayout({ children }) {
             🌐 Website öffen
           </a>
           <div className="s-tabs-right">
-            <button onClick={toggleTheme} className="s-view-tab">
-              {light ? '🌙' : '☀️'}
+            <button onClick={() => setShowNews(true)} style={{ background: 'rgba(224,32,32,.1)', border: '1px solid rgba(224,32,32,.25)', color: '#e02020', fontWeight: 700, fontSize: '.75rem', padding: '.25rem .7rem', borderRadius: '999px', cursor: 'pointer', letterSpacing: '.03em' }}>
+              ✦ Neu
             </button>
             <button onClick={handleLogout} className="s-view-tab s-view-tab-logout">
               ⏻
@@ -91,6 +84,51 @@ export default function DashboardLayout({ children }) {
         </div>
         {children}
       </main>
+
+      {showNews && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 9000, background: 'rgba(0,0,0,.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={e => e.target === e.currentTarget && setShowNews(false)}>
+          <div style={{ background: '#fff', borderRadius: '16px', padding: '2rem 2.2rem', maxWidth: '480px', width: '92vw', boxShadow: '0 20px 60px rgba(0,0,0,.25)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.2rem' }}>
+              <h2 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800, color: '#1a1a1a' }}>✦ Neuigkeiten</h2>
+              <button onClick={() => setShowNews(false)} style={{ background: 'none', border: 'none', fontSize: '1.3rem', cursor: 'pointer', color: '#999', lineHeight: 1 }}>✕</button>
+            </div>
+
+            <div style={{ background: 'rgba(224,32,32,.06)', border: '1px solid rgba(224,32,32,.15)', borderRadius: '10px', padding: '1rem 1.2rem', marginBottom: '1rem' }}>
+              <div style={{ fontSize: '.95rem', fontWeight: 700, color: '#e02020', marginBottom: '.4rem' }}>🎨 Stil-Anpassung pro Textfeld</div>
+              <p style={{ margin: 0, fontSize: '.85rem', color: '#555', lineHeight: 1.65 }}>
+                Ab sofort können Sie <strong>Farbe, Schriftgröße und Schriftart</strong> für jedes einzelne Textfeld individuell anpassen.
+              </p>
+            </div>
+
+            <div style={{ fontSize: '.85rem', color: '#555', lineHeight: 1.7, marginBottom: '1.2rem' }}>
+              <p style={{ margin: '0 0 .6rem' }}><strong>So funktioniert es:</strong></p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '.5rem' }}>
+                <div style={{ display: 'flex', gap: '.6rem', alignItems: 'flex-start' }}>
+                  <span style={{ background: '#f5f5f5', border: '1px solid #ddd', borderRadius: '5px', width: '26px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', flexShrink: 0 }}>🎨</span>
+                  <span>Neben jedem Textfeld erscheint ein kleines <strong>Palette-Symbol</strong>. Klicken Sie darauf.</span>
+                </div>
+                <div style={{ display: 'flex', gap: '.6rem', alignItems: 'flex-start' }}>
+                  <span style={{ background: '#f5f5f5', border: '1px solid #ddd', borderRadius: '5px', width: '26px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', flexShrink: 0 }}>🎯</span>
+                  <span>Wählen Sie <strong>Farbe</strong>, <strong>Größe</strong> (XS–6XL) oder <strong>Schriftart</strong> — die Änderung wird sofort gespeichert.</span>
+                </div>
+                <div style={{ display: 'flex', gap: '.6rem', alignItems: 'flex-start' }}>
+                  <span style={{ background: '#f5f5f5', border: '1px solid #ddd', borderRadius: '5px', width: '26px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', flexShrink: 0 }}>🌐</span>
+                  <span>Die Änderungen werden automatisch auf der <strong>öffentlichen Website</strong> angezeigt.</span>
+                </div>
+              </div>
+            </div>
+
+            <p style={{ margin: '0 0 1.2rem', fontSize: '.8rem', color: '#999' }}>
+              Verfügbar in allen Sektionen: Startseite, Leistungen, Projekte, Prozess, Referenzen, 3D und FEM.
+            </p>
+
+            <button onClick={() => setShowNews(false)} style={{
+              width: '100%', padding: '.75rem', borderRadius: '10px', border: 'none',
+              background: '#e02020', color: '#fff', fontWeight: 700, fontSize: '.95rem', cursor: 'pointer',
+            }}>Verstanden</button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

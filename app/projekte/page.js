@@ -41,9 +41,9 @@ export default async function ProjektePage() {
                   <div className="proj-img-overlay"></div>
                 </div>
                 <div className="proj-body">
-                  <div className="proj-cat">{p.category}</div>
-                  <div className="proj-title">{p.title}</div>
-                  <div className="proj-client">{p.client}</div>
+                  <div className="proj-cat" data-sk="projekte.category">{p.category}</div>
+                  <div className="proj-title" data-sk="projekte.title">{p.title}</div>
+                  <div className="proj-client" data-sk="projekte.client">{p.client}</div>
                 </div>
               </div>
             ))}

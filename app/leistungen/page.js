@@ -32,8 +32,8 @@ export default async function LeistungenPage() {
             {services.map((s) => (
               <div key={s.id} className="service-card fade-in">
                 <div className="svc-icon">{s.icon}</div>
-                <h3 className="svc-title">{s.title}</h3>
-                <p className="svc-desc">{s.desc_text}</p>
+                <h3 className="svc-title" data-sk="leistungen.title">{s.title}</h3>
+                <p className="svc-desc" data-sk="leistungen.desc">{s.desc_text}</p>
               </div>
             ))}
           </div>

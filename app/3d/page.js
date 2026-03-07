@@ -26,10 +26,10 @@ export default async function ThreeDPage() {
 
           {/* Encabezado */}
           <div className="fade-in">
-            <span className="tag">{c.page_tag ?? '3D-Dienstleistungen'}</span>
+            <span className="tag" data-sk="threed.tag">{c.page_tag ?? '3D-Dienstleistungen'}</span>
             <div className="divider"></div>
-            <h2 className="section-title">{c.page_title ?? '3D-Animation & Visualisierung'}</h2>
-            {c.page_sub && <p className="section-sub">{c.page_sub}</p>}
+            <h2 className="section-title" data-sk="threed.title">{c.page_title ?? '3D-Animation & Visualisierung'}</h2>
+            {c.page_sub && <p className="section-sub" data-sk="threed.sub">{c.page_sub}</p>}
           </div>
 
           {/* Fila superior: imagen grande + pequeñas */}

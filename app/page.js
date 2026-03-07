@@ -34,16 +34,16 @@ export default async function HomePage() {
 
             {/* Columna izquierda: texto */}
             <div className="hero-content fade-in">
-              <div className="hero-badge">
+              <div className="hero-badge" data-sk="hero.badge">
                 <span className="dot"></span>
                 {hero?.badge_text ?? 'Sevelen · CH-9475 · Schweiz'}
               </div>
-              <p className="hero-eyebrow">iNOTEC-Engineering</p>
+              <p className="hero-eyebrow" data-sk="hero.eyebrow">iNOTEC-Engineering</p>
               <h1 className="hero-title">
-                {hero?.title_line1 ?? 'Von der Idee'}<br />
-                <span className="red">{hero?.title_line2_red ?? 'zum Produkt.'}</span>
+                <span data-sk="hero.title1">{hero?.title_line1 ?? 'Von der Idee'}</span><br />
+                <span className="red" data-sk="hero.title2">{hero?.title_line2_red ?? 'zum Produkt.'}</span>
               </h1>
-              <p className="hero-desc">
+              <p className="hero-desc" data-sk="hero.desc">
                 {hero?.description ?? 'Ganzheitliche Engineering-Prozesse von der ersten Konzeptidee bis hin zum fertigen Prototypen. Vakuumtechnik, Handlings-Systeme und innovative Gebrauchsgegenstände — realisiert mit 3D Autodesk Inventor und AutoCAD.'}
               </p>
               <div className="hero-btns">
@@ -61,16 +61,16 @@ export default async function HomePage() {
               {/* Estadísticas */}
               <div className="hero-stats">
                 <div>
-                  <div className="stat-val">{hero?.stat1_val ?? '20+'}</div>
-                  <div className="stat-lbl">{hero?.stat1_lbl ?? 'Jahre Erfahrung'}</div>
+                  <div className="stat-val" data-sk="hero.stat1_val">{hero?.stat1_val ?? '20+'}</div>
+                  <div className="stat-lbl" data-sk="hero.stat1_lbl">{hero?.stat1_lbl ?? 'Jahre Erfahrung'}</div>
                 </div>
                 <div>
-                  <div className="stat-val">{hero?.stat2_val ?? '25+'}</div>
-                  <div className="stat-lbl">{hero?.stat2_lbl ?? 'Referenzkunden'}</div>
+                  <div className="stat-val" data-sk="hero.stat2_val">{hero?.stat2_val ?? '25+'}</div>
+                  <div className="stat-lbl" data-sk="hero.stat2_lbl">{hero?.stat2_lbl ?? 'Referenzkunden'}</div>
                 </div>
                 <div>
-                  <div className="stat-val">{hero?.stat3_val ?? '136+'}</div>
-                  <div className="stat-lbl">{hero?.stat3_lbl ?? 'Projekte realisiert'}</div>
+                  <div className="stat-val" data-sk="hero.stat3_val">{hero?.stat3_val ?? '136+'}</div>
+                  <div className="stat-lbl" data-sk="hero.stat3_lbl">{hero?.stat3_lbl ?? 'Projekte realisiert'}</div>
                 </div>
               </div>
             </div>
@@ -131,11 +131,11 @@ export default async function HomePage() {
               <span className="tag">{erfahrung?.tag_left ?? 'Herzlich Willkommen'}</span>
               <div className="divider"></div>
               <h2 className="section-title">{erfahrung?.title ?? 'Ganzheitliche Engineering-Prozesse'}</h2>
-              {erfahrung?.text1 && <p className="text-block">{erfahrung.text1}</p>}
-              {erfahrung?.text2 && <p className="text-block" dangerouslySetInnerHTML={{ __html: erfahrung.text2 }} />}
-              {erfahrung?.text3 && <p className="text-block" dangerouslySetInnerHTML={{ __html: erfahrung.text3 }} />}
+              {erfahrung?.text1 && <p className="text-block" data-sk="erfahrung.text1">{erfahrung.text1}</p>}
+              {erfahrung?.text2 && <p className="text-block" data-sk="erfahrung.text2" dangerouslySetInnerHTML={{ __html: erfahrung.text2 }} />}
+              {erfahrung?.text3 && <p className="text-block" data-sk="erfahrung.text3" dangerouslySetInnerHTML={{ __html: erfahrung.text3 }} />}
               {erfahrung?.highlight_text && (
-                <div className="highlight-box">
+                <div className="highlight-box" data-sk="erfahrung.highlight">
                   <p dangerouslySetInnerHTML={{ __html: erfahrung.highlight_text }} />
                 </div>
               )}

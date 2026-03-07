@@ -57,8 +57,8 @@ export default async function ProzessPage() {
                           </span>
                         ))}
                       </div>
-                      <div className="tl-title">{step.title}</div>
-                      <div className="tl-desc">{step.desc_text}</div>
+                      <div className="tl-title" data-sk="prozess.title">{step.title}</div>
+                      <div className="tl-desc" data-sk="prozess.desc">{step.desc_text}</div>
                     </div>
                   </div>
                 )

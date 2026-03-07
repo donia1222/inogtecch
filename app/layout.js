@@ -6,6 +6,7 @@ import './globals.css'
 import ConditionalNav    from '@/components/ConditionalNav'
 import ConditionalFooter from '@/components/ConditionalFooter'
 import CookieBanner      from '@/components/CookieBanner'
+import FieldStyleInjector from '@/components/FieldStyleInjector'
 
 /* Metadatos de la página (SEO) */
 export const metadata = {
@@ -49,7 +50,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="de">
       <body>
-        {/* Navbar — se oculta automáticamente en /studio/* */}
+        <FieldStyleInjector />
+        {/* Navbar — se oculta automaticamente en /studio/* */}
         <ConditionalNav />
 
         {/* Contenido de cada página */}

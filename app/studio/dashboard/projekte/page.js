@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { checkAuth, apiGet, apiPost, apiPut, apiDelete } from '@/lib/api'
-import { useToast, Toast, Modal, Field, Input, Row, ImgUpload, EditBtn, DelBtn, AddBtn, VisualCard, SectionHeader } from '@/app/studio/ve'
+import { useToast, Toast, Modal, Field, Input, Row, ImgUpload, EditBtn, DelBtn, AddBtn, VisualCard, SectionHeader, FieldStylesProvider } from '@/app/studio/ve'
 
 const emptyProj = { img_url: '', alt_text: '', category: '', title: '', client: '' }
 const emptyGal  = { img_url: '', alt_text: '' }
@@ -78,10 +78,10 @@ function ProjekteTab() {
         {modal && <>
           <Field label="Bild"><ImgUpload value={modal.data.img_url} onChange={v => set('img_url', v)} /></Field>
           <Field label="Alt-Text"><Input value={modal.data.alt_text} onChange={e => set('alt_text', e.target.value)} placeholder="Bildbeschreibung" /></Field>
-          <Field label="Titel"><Input value={modal.data.title} onChange={e => set('title', e.target.value)} placeholder="Projektname" /></Field>
+          <Field label="Titel" styleKey="projekte.title"><Input value={modal.data.title} onChange={e => set('title', e.target.value)} placeholder="Projektname" /></Field>
           <Row>
-            <Field label="Kategorie"><Input value={modal.data.category} onChange={e => set('category', e.target.value)} placeholder="Vakuumtechnik · Sputtering" /></Field>
-            <Field label="Kunde"><Input value={modal.data.client} onChange={e => set('client', e.target.value)} placeholder="Firma AG · CH-Ort" /></Field>
+            <Field label="Kategorie" styleKey="projekte.category"><Input value={modal.data.category} onChange={e => set('category', e.target.value)} placeholder="Vakuumtechnik · Sputtering" /></Field>
+            <Field label="Kunde" styleKey="projekte.client"><Input value={modal.data.client} onChange={e => set('client', e.target.value)} placeholder="Firma AG · CH-Ort" /></Field>
           </Row>
         </>}
       </Modal>
@@ -172,6 +172,7 @@ export default function ProjekteEditorPage() {
   const tabs = [['projekte', '🏗️ Projekte'], ['galerie', '🖼️ Galerie']]
 
   return (
+    <FieldStylesProvider>
     <div style={{ maxWidth: '1100px' }}>
       <h1 className="s-page-title">Projekte & Galerie</h1>
       <p className="s-page-sub">Projektkarten und Bildergalerie — visuell verwalten</p>
@@ -183,5 +184,6 @@ export default function ProjekteEditorPage() {
       {tab === 'projekte' && <ProjekteTab />}
       {tab === 'galerie'  && <GalerieTab />}
     </div>
+    </FieldStylesProvider>
   )
 }

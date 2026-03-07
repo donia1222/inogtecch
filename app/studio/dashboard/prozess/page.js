@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { checkAuth, apiGet, apiPost, apiPut, apiDelete } from '@/lib/api'
-import { useToast, Toast, Modal, Field, Input, Textarea, Row, EditBtn, DelBtn, AddBtn, VisualCard, SectionHeader } from '@/app/studio/ve'
+import { useToast, Toast, Modal, Field, Input, Textarea, Row, EditBtn, DelBtn, AddBtn, VisualCard, SectionHeader, FieldStylesProvider } from '@/app/studio/ve'
 
 const ACTORS   = ['Kunde', 'iNOTEC']
 const emptyStep = { step_num: '', actors: [], title: '', desc_text: '' }
@@ -63,6 +63,7 @@ export default function ProzessEditorPage() {
   }
 
   return (
+    <FieldStylesProvider>
     <div style={{ maxWidth: '800px' }}>
       <Toast {...toast} />
       <h1 className="s-page-title">Prozess</h1>
@@ -107,10 +108,11 @@ export default function ProzessEditorPage() {
             <Field label="Schritt-Nr."><Input value={modal.data.step_num} onChange={e => set('step_num', e.target.value)} placeholder="01" /></Field>
             <Field label="Akteure"><ActorToggle selected={modal.data.actors || []} onChange={v => set('actors', v)} /></Field>
           </Row>
-          <Field label="Titel"><Input value={modal.data.title} onChange={e => set('title', e.target.value)} placeholder="Schritt-Titel" /></Field>
-          <Field label="Beschreibung"><Textarea value={modal.data.desc_text} onChange={e => set('desc_text', e.target.value)} rows={2} /></Field>
+          <Field label="Titel" styleKey="prozess.title"><Input value={modal.data.title} onChange={e => set('title', e.target.value)} placeholder="Schritt-Titel" /></Field>
+          <Field label="Beschreibung" styleKey="prozess.desc"><Textarea value={modal.data.desc_text} onChange={e => set('desc_text', e.target.value)} rows={2} /></Field>
         </>}
       </Modal>
     </div>
+    </FieldStylesProvider>
   )
 }

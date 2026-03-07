@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { checkAuth, apiGet, apiPost, apiPut, apiDelete } from '@/lib/api'
-import { useToast, Toast, Modal, Field, Input, ImgUpload, EditBtn, DelBtn, AddBtn, VisualCard, SectionHeader } from '@/app/studio/ve'
+import { useToast, Toast, Modal, Field, Input, ImgUpload, EditBtn, DelBtn, AddBtn, VisualCard, SectionHeader, FieldStylesProvider } from '@/app/studio/ve'
 
 /* ── Logos Tab ──────────────────────────────────────── */
 function LogosTab() {
@@ -131,8 +131,8 @@ function PartnerTab() {
       >
         {modal && <>
           <Field label="Logo"><ImgUpload value={modal.data.img_url} onChange={v => set('img_url', v)} /></Field>
-          <Field label="Name"><Input value={modal.data.name} onChange={e => set('name', e.target.value)} placeholder="z.B. RMB AG" /></Field>
-          <Field label="Beschreibung"><Input value={modal.data.desc_text} onChange={e => set('desc_text', e.target.value)} placeholder="z.B. Maschinenbau · CH-Sevelen" /></Field>
+          <Field label="Name" styleKey="partner.name"><Input value={modal.data.name} onChange={e => set('name', e.target.value)} placeholder="z.B. RMB AG" /></Field>
+          <Field label="Beschreibung" styleKey="partner.desc"><Input value={modal.data.desc_text} onChange={e => set('desc_text', e.target.value)} placeholder="z.B. Maschinenbau · CH-Sevelen" /></Field>
         </>}
       </Modal>
     </>
@@ -145,6 +145,7 @@ export default function ReferenzenEditorPage() {
   useEffect(() => { checkAuth().then(ok => { if (!ok) router.push('/studio') }) }, [])
 
   return (
+    <FieldStylesProvider>
     <div style={{ maxWidth: '1100px' }}>
       <h1 className="s-page-title">Referenzen</h1>
       <p className="s-page-sub">Kunden-Logos und Partner — visuell verwalten</p>
@@ -156,5 +157,6 @@ export default function ReferenzenEditorPage() {
       {tab === 'logos'   && <LogosTab />}
       {tab === 'partner' && <PartnerTab />}
     </div>
+    </FieldStylesProvider>
   )
 }

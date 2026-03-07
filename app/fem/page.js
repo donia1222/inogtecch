@@ -34,15 +34,15 @@ export default async function FEMPage() {
 
             {/* Texto */}
             <div className="fem-text fade-in">
-              <span className="tag">{content?.tag ?? 'Belastungsanalyse'}</span>
+              <span className="tag" data-sk="fem.tag">{content?.tag ?? 'Belastungsanalyse'}</span>
               <div className="divider"></div>
-              <h2 className="section-title">
+              <h2 className="section-title" data-sk="fem.title">
                 {content?.title ?? 'Digitale Produktentwicklung — heute Realität'}
               </h2>
-              {content?.text1 && <p>{content.text1}</p>}
-              {content?.text2 && <p>{content.text2}</p>}
-              {content?.text3 && <p>{content.text3}</p>}
-              {content?.text4 && <p>{content.text4}</p>}
+              {content?.text1 && <p data-sk="fem.text1">{content.text1}</p>}
+              {content?.text2 && <p data-sk="fem.text2">{content.text2}</p>}
+              {content?.text3 && <p data-sk="fem.text3">{content.text3}</p>}
+              {content?.text4 && <p data-sk="fem.text4">{content.text4}</p>}
 
               {benefits.length > 0 && (
                 <ul className="fem-list">

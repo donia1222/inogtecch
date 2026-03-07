@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { checkAuth, apiGet, apiPost, apiPut, apiDelete } from '@/lib/api'
-import { useToast, Toast, Modal, Field, Input, Textarea, Row, ImgUpload, EditBtn, DelBtn, AddBtn, VisualCard, SectionHeader } from '@/app/studio/ve'
+import { useToast, Toast, Modal, Field, Input, Textarea, Row, ImgUpload, EditBtn, DelBtn, AddBtn, VisualCard, SectionHeader, FieldStylesProvider } from '@/app/studio/ve'
 
 /* ════════════════════════════════════════════════════════════
    TAB: HERO
@@ -79,21 +79,21 @@ function HeroTab() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
         <div className="ve-card" style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: '12px', padding: '1.2rem', display: 'flex', flexDirection: 'column', gap: '.9rem' }}>
           <SectionHeader title="Badge & Titel" />
-          <Field label="Badge-Text"><Input value={data.badge_text} onChange={e => set('badge_text', e.target.value)} /></Field>
-          <Field label="Eyebrow"><Input value={data.eyebrow} onChange={e => set('eyebrow', e.target.value)} /></Field>
+          <Field label="Badge-Text" styleKey="hero.badge"><Input value={data.badge_text} onChange={e => set('badge_text', e.target.value)} /></Field>
+          <Field label="Eyebrow" styleKey="hero.eyebrow"><Input value={data.eyebrow} onChange={e => set('eyebrow', e.target.value)} /></Field>
           <Row>
-            <Field label="Titel Zeile 1"><Input value={data.title_line1} onChange={e => set('title_line1', e.target.value)} /></Field>
-            <Field label="Titel Zeile 2 (rot)"><Input value={data.title_line2_red} onChange={e => set('title_line2_red', e.target.value)} /></Field>
+            <Field label="Titel Zeile 1" styleKey="hero.title1"><Input value={data.title_line1} onChange={e => set('title_line1', e.target.value)} /></Field>
+            <Field label="Titel Zeile 2 (rot)" styleKey="hero.title2"><Input value={data.title_line2_red} onChange={e => set('title_line2_red', e.target.value)} /></Field>
           </Row>
-          <Field label="Beschreibung"><Textarea value={data.desc_text} onChange={e => set('desc_text', e.target.value)} rows={3} /></Field>
+          <Field label="Beschreibung" styleKey="hero.desc"><Textarea value={data.desc_text} onChange={e => set('desc_text', e.target.value)} rows={3} /></Field>
         </div>
 
         <div className="ve-card" style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: '12px', padding: '1.2rem', display: 'flex', flexDirection: 'column', gap: '.9rem' }}>
           <SectionHeader title="Statistiken" />
           {[1, 2, 3].map(n => (
             <Row key={n}>
-              <Field label={`Wert ${n}`}><Input value={data[`stat${n}_val`]} onChange={e => set(`stat${n}_val`, e.target.value)} placeholder="20+" /></Field>
-              <Field label={`Label ${n}`}><Input value={data[`stat${n}_lbl`]} onChange={e => set(`stat${n}_lbl`, e.target.value)} placeholder="Jahre Erfahrung" /></Field>
+              <Field label={`Wert ${n}`} styleKey={`hero.stat${n}_val`}><Input value={data[`stat${n}_val`]} onChange={e => set(`stat${n}_val`, e.target.value)} placeholder="20+" /></Field>
+              <Field label={`Label ${n}`} styleKey={`hero.stat${n}_lbl`}><Input value={data[`stat${n}_lbl`]} onChange={e => set(`stat${n}_lbl`, e.target.value)} placeholder="Jahre Erfahrung" /></Field>
             </Row>
           ))}
         </div>
@@ -196,7 +196,7 @@ function TickerTab() {
         <input value={newTxt} onChange={e => setNewTxt(e.target.value)} onKeyDown={e => e.key === 'Enter' && add()}
           placeholder="Neuer Ticker-Eintrag… (Enter zum Hinzufügen)"
           className="ve-input" style={{ flex: 1, background: '#0d0d0d', border: '1px solid #222', borderRadius: '9px', padding: '.7rem 1rem', color: '#fff', fontSize: '.88rem', outline: 'none' }} />
-        <button onClick={add} style={{ padding: '.7rem 1.2rem', borderRadius: '9px', border: 'none', background: '#e02020', color: '#fff', fontWeight: 700, cursor: 'pointer' }}>+ Hinzufügen</button>
+        <button onClick={add} style={{ padding: '.7rem 1.2rem', borderRadius: '9px', border: 'none', background: '#e02020', color: '#fff', fontWeight: 700, fontSize: '.95rem', cursor: 'pointer' }}>+ Hinzufügen</button>
       </div>
 
       <Modal open={!!modal} onClose={() => setModal(null)} title="Ticker-Element bearbeiten" onSave={saveEdit} saving={saving}>
@@ -293,15 +293,15 @@ function ErfahrungTab() {
         <SectionHeader title="Texte" />
         {['text1', 'text2', 'text3'].map((f, i) => (
           <div key={f} style={{ marginBottom: '.9rem' }}>
-            <Field label={`Absatz ${i + 1}`}>
+            <Field label={`Absatz ${i + 1}`} styleKey={`erfahrung.${f}`}>
               <Textarea value={content[f] || ''} onChange={e => setContent(c => ({ ...c, [f]: e.target.value }))} rows={3} />
             </Field>
           </div>
         ))}
-        <Field label="Highlight-Box">
+        <Field label="Highlight-Box" styleKey="erfahrung.highlight">
           <Textarea value={content.highlight_text || ''} onChange={e => setContent(c => ({ ...c, highlight_text: e.target.value }))} rows={3} />
         </Field>
-        <button onClick={saveContent} disabled={saving} style={{ marginTop: '1rem', padding: '.7rem 1.8rem', borderRadius: '8px', border: 'none', background: '#e02020', color: '#fff', fontWeight: 700, cursor: 'pointer' }}>
+        <button onClick={saveContent} disabled={saving} style={{ marginTop: '1rem', padding: '.75rem 1.8rem', borderRadius: '8px', border: 'none', background: '#e02020', color: '#fff', fontWeight: 700, fontSize: '.95rem', cursor: 'pointer' }}>
           Texte speichern
         </button>
       </div>
@@ -323,7 +323,7 @@ function ErfahrungTab() {
           <input value={newComp} onChange={e => setNewComp(e.target.value)} onKeyDown={e => e.key === 'Enter' && addComp()}
             placeholder="Neue Firma… (Enter)"
             className="ve-input" style={{ flex: 1, background: '#141414', border: '1px solid #222', borderRadius: '8px', padding: '.6rem .9rem', color: '#fff', fontSize: '.85rem', outline: 'none' }} />
-          <button onClick={addComp} style={{ padding: '.6rem 1.1rem', borderRadius: '8px', border: 'none', background: '#e02020', color: '#fff', fontWeight: 700, cursor: 'pointer' }}>+ Hinzufügen</button>
+          <button onClick={addComp} style={{ padding: '.65rem 1.1rem', borderRadius: '8px', border: 'none', background: '#e02020', color: '#fff', fontWeight: 700, fontSize: '.95rem', cursor: 'pointer' }}>+ Hinzufügen</button>
         </div>
       </div>
 
@@ -349,7 +349,7 @@ function ErfahrungTab() {
             placeholder="Beschreibung" onKeyDown={e => e.key === 'Enter' && addSpec()}
             className="ve-input" style={{ background: '#141414', border: '1px solid #222', borderRadius: '8px', padding: '.6rem .9rem', color: '#fff', fontSize: '.83rem', outline: 'none' }} />
         </div>
-        <button onClick={addSpec} style={{ marginTop: '.6rem', padding: '.6rem 1.4rem', borderRadius: '8px', border: 'none', background: '#e02020', color: '#fff', fontWeight: 700, cursor: 'pointer' }}>+ Spezialgebiet hinzufügen</button>
+        <button onClick={addSpec} style={{ marginTop: '.6rem', padding: '.65rem 1.4rem', borderRadius: '8px', border: 'none', background: '#e02020', color: '#fff', fontWeight: 700, fontSize: '.95rem', cursor: 'pointer' }}>+ Spezialgebiet hinzufügen</button>
       </div>
 
       {/* Modals */}
@@ -377,6 +377,7 @@ export default function HomeEditorPage() {
   useEffect(() => { checkAuth().then(ok => { if (!ok) router.push('/studio') }) }, [])
 
   return (
+    <FieldStylesProvider>
     <div style={{ maxWidth: '1000px' }}>
       <h1 className="s-page-title">Startseite</h1>
       <p className="s-page-sub">Hero, Ticker & Erfahrung — visuell bearbeiten</p>
@@ -389,5 +390,6 @@ export default function HomeEditorPage() {
       {tab === 'ticker'    && <TickerTab />}
       {tab === 'erfahrung' && <ErfahrungTab />}
     </div>
+    </FieldStylesProvider>
   )
 }

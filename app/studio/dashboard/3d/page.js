@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { API, checkAuth, apiGet, apiPost, apiPut, apiDelete } from '@/lib/api'
+import { FieldStylesProvider, useFieldStyles } from '@/app/studio/ve'
 
 function Toast({ msg, type }) {
   if (!msg) return null
@@ -12,6 +13,51 @@ function useToast() {
   const [t, setT] = useState({ msg: '', type: '' })
   function show(msg, type = 'ok') { setT({ msg, type }); setTimeout(() => setT({ msg: '', type: '' }), 3000) }
   return [t, show]
+}
+function StyledLabel({ label, styleKey }) {
+  const [open, setOpen] = useState(false)
+  const { styles, set, save } = useFieldStyles()
+  const s = styleKey ? (styles[styleKey] || {}) : null
+  async function saveStyle() { if (styleKey) try { await save(styleKey) } catch {} }
+  const hasStyle = s?.font_color || s?.font_size || s?.font_family
+  return (
+    <>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '.4rem' }}>
+        <label className="s-label" style={{ flex: 1 }}>{label}</label>
+        {styleKey && <button onClick={() => setOpen(!open)} style={{
+          background: hasStyle ? 'rgba(224,32,32,.15)' : 'rgba(255,255,255,.06)',
+          border: hasStyle ? '1px solid rgba(224,32,32,.3)' : '1px solid rgba(255,255,255,.1)',
+          borderRadius: '5px', width: '24px', height: '20px', cursor: 'pointer',
+          fontSize: '11px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color: hasStyle ? '#e02020' : '#666',
+        }}>🎨</button>}
+      </div>
+      {styleKey && open && (
+        <div style={{ display: 'flex', gap: '.5rem', alignItems: 'center', padding: '.4rem .6rem', background: '#f5f5f5', border: '1px solid #ddd', borderRadius: '7px', flexWrap: 'wrap', marginBottom: '.3rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '.3rem' }}>
+            <span style={{ fontSize: '.62rem', color: '#888' }}>Farbe</span>
+            <input type="color" value={s?.font_color || '#000000'} onChange={e => set(styleKey, 'font_color', e.target.value)} onBlur={saveStyle}
+              style={{ width: '22px', height: '22px', border: '1px solid #ccc', borderRadius: '4px', cursor: 'pointer', background: '#fff', padding: '1px' }} />
+            {s?.font_color && <button onClick={() => { set(styleKey, 'font_color', ''); setTimeout(saveStyle, 50) }} style={{ background: 'none', border: 'none', color: '#999', cursor: 'pointer', fontSize: '10px', padding: 0 }}>✕</button>}
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '.3rem' }}>
+            <span style={{ fontSize: '.62rem', color: '#888' }}>Gr.</span>
+            <select value={s?.font_size || ''} onChange={e => { set(styleKey, 'font_size', e.target.value); setTimeout(saveStyle, 50) }}
+              style={{ background: '#fff', border: '1px solid #ccc', borderRadius: '4px', color: '#333', fontSize: '.7rem', padding: '.15rem .3rem', cursor: 'pointer', outline: 'none' }}>
+              <option value="">Auto</option><option value="0.7rem">XS</option><option value="0.8rem">S</option><option value="0.9rem">M</option><option value="1rem">L</option><option value="1.15rem">XL</option><option value="1.4rem">2XL</option><option value="1.8rem">3XL</option><option value="2.2rem">4XL</option>
+            </select>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '.3rem' }}>
+            <span style={{ fontSize: '.62rem', color: '#888' }}>Font</span>
+            <select value={s?.font_family || ''} onChange={e => { set(styleKey, 'font_family', e.target.value); setTimeout(saveStyle, 50) }}
+              style={{ background: '#fff', border: '1px solid #ccc', borderRadius: '4px', color: '#333', fontSize: '.7rem', padding: '.15rem .3rem', cursor: 'pointer', outline: 'none' }}>
+              <option value="">Standard</option><option value="Separat, sans-serif">Separat</option><option value="Georgia, serif">Georgia</option><option value="Arial Black, sans-serif">Arial Black</option><option value="Courier New, monospace">Courier New</option>
+            </select>
+          </div>
+        </div>
+      )}
+    </>
+  )
 }
 function ImageInput({ label, value, onChange }) {
   const [uploading, setUploading] = useState(false)
@@ -59,16 +105,16 @@ function InhaltTab() {
         <div className="s-card-title">Seitenkopf</div>
         <div className="s-grid-3">
           <div className="s-form-group">
-            <label className="s-label">Tag</label>
+            <StyledLabel label="Tag" styleKey="threed.tag" />
             <input className="s-input" value={data.page_tag || ''} onChange={e => set('page_tag', e.target.value)} />
           </div>
           <div className="s-form-group" style={{ gridColumn: 'span 2' }}>
-            <label className="s-label">Titel</label>
+            <StyledLabel label="Titel" styleKey="threed.title" />
             <input className="s-input" value={data.page_title || ''} onChange={e => set('page_title', e.target.value)} />
           </div>
         </div>
         <div className="s-form-group">
-          <label className="s-label">Untertitel</label>
+          <StyledLabel label="Untertitel" styleKey="threed.sub" />
           <textarea className="s-textarea" rows={2} value={data.page_sub || ''} onChange={e => set('page_sub', e.target.value)} />
         </div>
       </div>
@@ -252,6 +298,7 @@ export default function ThreeDEditorPage() {
   useEffect(() => { checkAuth().then(ok => { if (!ok) router.push('/studio') }) }, [])
 
   return (
+    <FieldStylesProvider>
     <>
       <h1 className="s-page-title">3D & Visualisierung</h1>
       <p className="s-page-sub">Texte und Bilder der 3D-Seite bearbeiten</p>
@@ -263,5 +310,6 @@ export default function ThreeDEditorPage() {
       {tab === 'inhalt' && <InhaltTab />}
       {tab === 'bilder' && <BilderTab />}
     </>
+    </FieldStylesProvider>
   )
 }

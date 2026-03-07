@@ -3,8 +3,36 @@
 //  ve.js — Visual Editor shared utilities
 //  Importar en cada página admin del studio
 // ─────────────────────────────────────────────────────────
-import { useState, useRef } from 'react'
-import { API } from '@/lib/api'
+import { useState, useRef, useEffect, useCallback, createContext, useContext } from 'react'
+import { API, apiGet, apiPut } from '@/lib/api'
+
+/* ── Field Styles context ─────────────────────────────── */
+const FSCtx = createContext({ styles: {}, set: () => {}, save: () => {} })
+
+export function FieldStylesProvider({ children }) {
+  const [styles, setStyles] = useState({})
+  useEffect(() => { apiGet('field_styles.php').then(setStyles).catch(() => {}) }, [])
+
+  const set = useCallback((key, prop, val) => {
+    setStyles(prev => ({
+      ...prev,
+      [key]: { ...(prev[key] || {}), [prop]: val }
+    }))
+  }, [])
+
+  const save = useCallback(async (key) => {
+    const s = styles[key] || {}
+    await apiPut(`field_styles.php?key=${key}`, {
+      font_size: s.font_size || '',
+      font_color: s.font_color || '',
+      font_family: s.font_family || '',
+    })
+  }, [styles])
+
+  return <FSCtx.Provider value={{ styles, set, save }}>{children}</FSCtx.Provider>
+}
+
+export function useFieldStyles() { return useContext(FSCtx) }
 
 /* ── Toast ───────────────────────────────────────────── */
 export function useToast() {
@@ -49,7 +77,7 @@ export function Modal({ open, onClose, title, onSave, saving, children }) {
         <div className="ve-modal-footer" style={{ display: 'flex', gap: '.6rem', paddingTop: '1rem' }}>
           <button onClick={onSave} disabled={saving} style={{
             flex: 1, padding: '.7rem', borderRadius: '8px', border: 'none',
-            background: '#e02020', color: '#fff', fontWeight: 700, fontSize: '.9rem',
+            background: '#e02020', color: '#fff', fontWeight: 700, fontSize: '.95rem',
             cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? .6 : 1,
           }}>{saving ? 'Wird gespeichert…' : 'Speichern'}</button>
           <button onClick={onClose} className="ve-modal-cancel" style={{
@@ -63,10 +91,74 @@ export function Modal({ open, onClose, title, onSave, saving, children }) {
 }
 
 /* ── Field helpers inside Modal ──────────────────────── */
-export function Field({ label, children }) {
+export function Field({ label, children, styleKey }) {
+  const [open, setOpen] = useState(false)
+  const { styles, set, save } = useFieldStyles()
+  const s = styleKey ? (styles[styleKey] || {}) : null
+
+  async function saveStyle() {
+    if (!styleKey) return
+    try { await save(styleKey) } catch {}
+  }
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '.35rem' }}>
-      <label className="ve-field-label" style={{ fontSize: '.73rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.08em' }}>{label}</label>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '.4rem' }}>
+        <label className="ve-field-label" style={{ fontSize: '.73rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.08em', flex: 1 }}>{label}</label>
+        {styleKey && (
+          <button onClick={() => setOpen(!open)} title="Stil anpassen" style={{
+            background: (s?.font_color || s?.font_size || s?.font_family) ? 'rgba(224,32,32,.15)' : 'rgba(255,255,255,.06)',
+            border: (s?.font_color || s?.font_size || s?.font_family) ? '1px solid rgba(224,32,32,.3)' : '1px solid rgba(255,255,255,.1)',
+            borderRadius: '5px', width: '24px', height: '20px', cursor: 'pointer',
+            fontSize: '11px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: (s?.font_color || s?.font_size || s?.font_family) ? '#e02020' : '#666',
+          }}>🎨</button>
+        )}
+      </div>
+      {styleKey && open && (
+        <div style={{
+          display: 'flex', gap: '.5rem', alignItems: 'center', padding: '.4rem .6rem',
+          background: '#f5f5f5', border: '1px solid #ddd', borderRadius: '7px',
+          flexWrap: 'wrap',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '.3rem' }}>
+            <span style={{ fontSize: '.62rem', color: '#888' }}>Farbe</span>
+            <input type="color" value={s?.font_color || '#000000'}
+              onChange={e => set(styleKey, 'font_color', e.target.value)}
+              onBlur={saveStyle}
+              style={{ width: '22px', height: '22px', border: '1px solid #ccc', borderRadius: '4px', cursor: 'pointer', background: '#fff', padding: '1px' }} />
+            {s?.font_color && <button onClick={() => { set(styleKey, 'font_color', ''); setTimeout(saveStyle, 50) }} style={{ background: 'none', border: 'none', color: '#999', cursor: 'pointer', fontSize: '10px', padding: 0 }}>✕</button>}
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '.3rem' }}>
+            <span style={{ fontSize: '.62rem', color: '#888' }}>Gr.</span>
+            <select value={s?.font_size || ''} onChange={e => { set(styleKey, 'font_size', e.target.value); setTimeout(saveStyle, 50) }}
+              style={{ background: '#fff', border: '1px solid #ccc', borderRadius: '4px', color: '#333', fontSize: '.7rem', padding: '.15rem .3rem', cursor: 'pointer', outline: 'none' }}>
+              <option value="">Auto</option>
+              <option value="0.7rem">XS</option>
+              <option value="0.8rem">S</option>
+              <option value="0.9rem">M</option>
+              <option value="1rem">L</option>
+              <option value="1.15rem">XL</option>
+              <option value="1.4rem">2XL</option>
+              <option value="1.8rem">3XL</option>
+              <option value="2.2rem">4XL</option>
+              <option value="2.8rem">5XL</option>
+              <option value="3.5rem">6XL</option>
+            </select>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '.3rem' }}>
+            <span style={{ fontSize: '.62rem', color: '#888' }}>Font</span>
+            <select value={s?.font_family || ''} onChange={e => { set(styleKey, 'font_family', e.target.value); setTimeout(saveStyle, 50) }}
+              style={{ background: '#fff', border: '1px solid #ccc', borderRadius: '4px', color: '#333', fontSize: '.7rem', padding: '.15rem .3rem', cursor: 'pointer', outline: 'none' }}>
+              <option value="">Standard</option>
+              <option value="Separat, sans-serif">Separat</option>
+              <option value="Georgia, serif">Georgia</option>
+              <option value="Arial Black, sans-serif">Arial Black</option>
+              <option value="Courier New, monospace">Courier New</option>
+            </select>
+          </div>
+        </div>
+      )}
       {children}
     </div>
   )

@@ -215,7 +215,7 @@
   font-family: inherit;
 }
 .s-btn:disabled { opacity: .5; cursor: not-allowed; }
-.s-btn-primary { background: #e02020; color: #fff; }
+.s-btn-primary { background: #e02020; color: #fff; font-size: .95rem; }
 .s-btn-primary:hover:not(:disabled) { background: #c01010; }
 .s-btn-secondary { background: transparent; border: 1px solid #2a2a2a; color: #999; }
 .s-btn-secondary:hover:not(:disabled) { border-color: #444; color: #e0e0e0; }
@@ -543,14 +543,19 @@
 [data-lm] .ve-img-ph     { background: #e8eaed !important; color: #9ca3af !important; }
 [data-lm] .ve-chip       { background: rgba(74,128,192,.08) !important; border-color: rgba(74,128,192,.25) !important; color: #4a80c0 !important; }
 [data-lm] .ve-card-inner { background: #f0f2f5 !important; color: #1a1a1a !important; }
-/* force readable text inside light cards — override ALL inline text colors */
-[data-lm] .ve-card *,
-[data-lm] .ve-preview *,
-[data-lm] .ve-card-inner *,
-[data-lm] .ve-vc * { color: inherit !important; }
+/* force readable text inside light cards — override ALL inline text colors (except buttons) */
+[data-lm] .ve-card *:not(button),
+[data-lm] .ve-preview *:not(button),
+[data-lm] .ve-card-inner *:not(button),
+[data-lm] .ve-vc *:not(button) { color: inherit !important; }
 /* restore red accents explicitly */
 [data-lm] .ve-card .ve-del-btn,
 [data-lm] .ve-vc .ve-del-btn  { color: #e02020 !important; }
+/* restore white text on red action buttons inside cards */
+[data-lm] .ve-card button[style*="background: #e02020"],
+[data-lm] .ve-card button[style*="background:#e02020"],
+[data-lm] .ve-preview button[style*="background: #e02020"],
+[data-lm] .ve-preview button[style*="background: #e02020"] { color: #fff !important; font-size: .95rem !important; }
 
 /* ── Inline dark color overrides (page-level cards/elements) ─ */
 /* dark backgrounds → light */

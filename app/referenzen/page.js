@@ -61,8 +61,8 @@ export default async function ReferenzenPage() {
                 <div className="partner-logo">
                   <img src={p.img_url} alt={p.name} />
                 </div>
-                <div className="partner-name">{p.name}</div>
-                <div className="partner-desc">{p.desc_text}</div>
+                <div className="partner-name" data-sk="partner.name">{p.name}</div>
+                <div className="partner-desc" data-sk="partner.desc">{p.desc_text}</div>
               </div>
             ))}
           </div>

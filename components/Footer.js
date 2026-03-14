@@ -20,10 +20,9 @@ export default async function Footer() {
         <div className="footer-inner">
           {/* Logo en texto */}
           <div className="footer-logo" style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
-            <img src="/assets/p1_img4.png" alt="iNOTEC" style={{ height: '16px', objectFit: 'contain' }} />
-            <span style={{ display: 'inline-flex', alignItems: 'flex-start', gap: '0', fontSize: '16px', fontWeight: 600, color: 'var(--muted)', letterSpacing: '.25em', textTransform: 'uppercase', lineHeight: 1, fontFamily: "'Separat', sans-serif" }}>
-              <span style={{ color: 'var(--red)', fontSize: '11px', lineHeight: '0.7', marginRight: '1px' }}>&#9660;</span>{sub}
-            </span>
+            <img src="/assets/inotec.png" alt="iNOTEC" style={{ height: '38px', objectFit: 'contain' }} />
+            <img src="/assets/eingenieringwhite.png" alt="Engineering" className="footer-eng-dark" style={{ height: '22px', objectFit: 'contain', marginLeft: '-10px', marginTop: '10px' }} />
+            <img src="/assets/eingenieringblack.png" alt="Engineering" className="footer-eng-light" style={{ height: '22px', objectFit: 'contain', marginLeft: '-10px', display: 'none' }} />
           </div>
 
           {/* Información de copyright */}

@@ -55,6 +55,12 @@ html.day {
   --shadow:     rgba(80,90,140,.15);
 }
 
+/* Footer engineering logo: dark/light toggle */
+.footer-eng-dark { display: inline; }
+.footer-eng-light { display: none !important; }
+html.day .footer-eng-dark { display: none !important; }
+html.day .footer-eng-light { display: inline !important; }
+
 /* Transición suave al cambiar tema */
 body, nav, section, footer, .service-card, .proj-card,
 .threed-bottom-card, .partner-card, .logo-tile, .client-tile,

@@ -11,23 +11,26 @@ const FSCtx = createContext({ styles: {}, set: () => {}, save: () => {} })
 
 export function FieldStylesProvider({ children }) {
   const [styles, setStyles] = useState({})
+  const stylesRef = useRef(styles)
+  useEffect(() => { stylesRef.current = styles }, [styles])
   useEffect(() => { apiGet('field_styles.php').then(setStyles).catch(() => {}) }, [])
 
   const set = useCallback((key, prop, val) => {
-    setStyles(prev => ({
-      ...prev,
-      [key]: { ...(prev[key] || {}), [prop]: val }
-    }))
+    setStyles(prev => {
+      const next = { ...prev, [key]: { ...(prev[key] || {}), [prop]: val } }
+      stylesRef.current = next
+      return next
+    })
   }, [])
 
   const save = useCallback(async (key) => {
-    const s = styles[key] || {}
+    const s = stylesRef.current[key] || {}
     await apiPut(`field_styles.php?key=${key}`, {
       font_size: s.font_size || '',
       font_color: s.font_color || '',
       font_family: s.font_family || '',
     })
-  }, [styles])
+  }, [])
 
   return <FSCtx.Provider value={{ styles, set, save }}>{children}</FSCtx.Provider>
 }
@@ -107,11 +110,11 @@ export function Field({ label, children, styleKey }) {
         <label className="ve-field-label" style={{ fontSize: '.73rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.08em', flex: 1 }}>{label}</label>
         {styleKey && (
           <button onClick={() => setOpen(!open)} title="Stil anpassen" style={{
-            background: (s?.font_color || s?.font_size || s?.font_family) ? 'rgba(224,32,32,.15)' : 'rgba(255,255,255,.06)',
-            border: (s?.font_color || s?.font_size || s?.font_family) ? '1px solid rgba(224,32,32,.3)' : '1px solid rgba(255,255,255,.1)',
+            background: (s?.font_size || s?.font_family) ? 'rgba(224,32,32,.15)' : 'rgba(255,255,255,.06)',
+            border: (s?.font_size || s?.font_family) ? '1px solid rgba(224,32,32,.3)' : '1px solid rgba(255,255,255,.1)',
             borderRadius: '5px', width: '24px', height: '20px', cursor: 'pointer',
             fontSize: '11px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: (s?.font_color || s?.font_size || s?.font_family) ? '#e02020' : '#666',
+            color: (s?.font_size || s?.font_family) ? '#e02020' : '#666',
           }}>🎨</button>
         )}
       </div>
@@ -121,14 +124,6 @@ export function Field({ label, children, styleKey }) {
           background: '#f5f5f5', border: '1px solid #ddd', borderRadius: '7px',
           flexWrap: 'wrap',
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '.3rem' }}>
-            <span style={{ fontSize: '.62rem', color: '#888' }}>Farbe</span>
-            <input type="color" value={s?.font_color || '#000000'}
-              onChange={e => set(styleKey, 'font_color', e.target.value)}
-              onBlur={saveStyle}
-              style={{ width: '22px', height: '22px', border: '1px solid #ccc', borderRadius: '4px', cursor: 'pointer', background: '#fff', padding: '1px' }} />
-            {s?.font_color && <button onClick={() => { set(styleKey, 'font_color', ''); setTimeout(saveStyle, 50) }} style={{ background: 'none', border: 'none', color: '#999', cursor: 'pointer', fontSize: '10px', padding: 0 }}>✕</button>}
-          </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '.3rem' }}>
             <span style={{ fontSize: '.62rem', color: '#888' }}>Gr.</span>
             <select value={s?.font_size || ''} onChange={e => { set(styleKey, 'font_size', e.target.value); setTimeout(saveStyle, 50) }}

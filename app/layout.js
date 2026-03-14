@@ -7,6 +7,7 @@ import ConditionalNav    from '@/components/ConditionalNav'
 import ConditionalFooter from '@/components/ConditionalFooter'
 import CookieBanner      from '@/components/CookieBanner'
 import FieldStyleInjector from '@/components/FieldStyleInjector'
+import { apiGet } from '@/lib/api'
 
 /* Metadatos de la página (SEO) */
 export const metadata = {
@@ -46,13 +47,19 @@ export const metadata = {
   },
 }
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  let logoSub = 'ENGINEERING'
+  try {
+    const hero = await apiGet('hero.php')
+    if (hero?.eyebrow_sub) logoSub = hero.eyebrow_sub
+  } catch {}
+
   return (
     <html lang="de">
       <body>
         <FieldStyleInjector />
         {/* Navbar — se oculta automaticamente en /studio/* */}
-        <ConditionalNav />
+        <ConditionalNav logoSub={logoSub} />
 
         {/* Contenido de cada página */}
         <main>

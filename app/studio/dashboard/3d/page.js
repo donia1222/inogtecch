@@ -19,7 +19,7 @@ function StyledLabel({ label, styleKey }) {
   const { styles, set, save } = useFieldStyles()
   const s = styleKey ? (styles[styleKey] || {}) : null
   async function saveStyle() { if (styleKey) try { await save(styleKey) } catch {} }
-  const hasStyle = s?.font_color || s?.font_size || s?.font_family
+  const hasStyle = s?.font_size || s?.font_family
   return (
     <>
       <div style={{ display: 'flex', alignItems: 'center', gap: '.4rem' }}>
@@ -34,12 +34,6 @@ function StyledLabel({ label, styleKey }) {
       </div>
       {styleKey && open && (
         <div style={{ display: 'flex', gap: '.5rem', alignItems: 'center', padding: '.4rem .6rem', background: '#f5f5f5', border: '1px solid #ddd', borderRadius: '7px', flexWrap: 'wrap', marginBottom: '.3rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '.3rem' }}>
-            <span style={{ fontSize: '.62rem', color: '#888' }}>Farbe</span>
-            <input type="color" value={s?.font_color || '#000000'} onChange={e => set(styleKey, 'font_color', e.target.value)} onBlur={saveStyle}
-              style={{ width: '22px', height: '22px', border: '1px solid #ccc', borderRadius: '4px', cursor: 'pointer', background: '#fff', padding: '1px' }} />
-            {s?.font_color && <button onClick={() => { set(styleKey, 'font_color', ''); setTimeout(saveStyle, 50) }} style={{ background: 'none', border: 'none', color: '#999', cursor: 'pointer', fontSize: '10px', padding: 0 }}>✕</button>}
-          </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '.3rem' }}>
             <span style={{ fontSize: '.62rem', color: '#888' }}>Gr.</span>
             <select value={s?.font_size || ''} onChange={e => { set(styleKey, 'font_size', e.target.value); setTimeout(saveStyle, 50) }}

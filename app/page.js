@@ -38,13 +38,12 @@ export default async function HomePage() {
                 <span className="dot"></span>
                 {hero?.badge_text ?? 'Sevelen · CH-9475 · Schweiz'}
               </div>
-              <p className="hero-eyebrow" data-sk="hero.eyebrow">iNOTEC-Engineering</p>
               <h1 className="hero-title">
                 <span data-sk="hero.title1">{hero?.title_line1 ?? 'Von der Idee'}</span><br />
                 <span className="red" data-sk="hero.title2">{hero?.title_line2_red ?? 'zum Produkt.'}</span>
               </h1>
               <p className="hero-desc" data-sk="hero.desc">
-                {hero?.description ?? 'Ganzheitliche Engineering-Prozesse von der ersten Konzeptidee bis hin zum fertigen Prototypen. Vakuumtechnik, Handlings-Systeme und innovative Gebrauchsgegenstände — realisiert mit 3D Autodesk Inventor und AutoCAD.'}
+                {hero?.desc_text ?? 'Ganzheitliche Engineering-Prozesse von der ersten Konzeptidee bis hin zum fertigen Prototypen. Vakuumtechnik, Handlings-Systeme und innovative Gebrauchsgegenstände — realisiert mit 3D Autodesk Inventor und AutoCAD.'}
               </p>
               <div className="hero-btns">
                 <a href="#contact" className="btn-primary">
@@ -61,16 +60,16 @@ export default async function HomePage() {
               {/* Estadísticas */}
               <div className="hero-stats">
                 <div>
-                  <div className="stat-val" data-sk="hero.stat1_val">{hero?.stat1_val ?? '20+'}</div>
-                  <div className="stat-lbl" data-sk="hero.stat1_lbl">{hero?.stat1_lbl ?? 'Jahre Erfahrung'}</div>
+                  <div className="stat-val">{hero?.stat1_val ?? '20+'}</div>
+                  <div className="stat-lbl">{hero?.stat1_lbl ?? 'Jahre Erfahrung'}</div>
                 </div>
                 <div>
-                  <div className="stat-val" data-sk="hero.stat2_val">{hero?.stat2_val ?? '25+'}</div>
-                  <div className="stat-lbl" data-sk="hero.stat2_lbl">{hero?.stat2_lbl ?? 'Referenzkunden'}</div>
+                  <div className="stat-val">{hero?.stat2_val ?? '25+'}</div>
+                  <div className="stat-lbl">{hero?.stat2_lbl ?? 'Referenzkunden'}</div>
                 </div>
                 <div>
-                  <div className="stat-val" data-sk="hero.stat3_val">{hero?.stat3_val ?? '136+'}</div>
-                  <div className="stat-lbl" data-sk="hero.stat3_lbl">{hero?.stat3_lbl ?? 'Projekte realisiert'}</div>
+                  <div className="stat-val">{hero?.stat3_val ?? '136+'}</div>
+                  <div className="stat-lbl">{hero?.stat3_lbl ?? 'Projekte realisiert'}</div>
                 </div>
               </div>
             </div>
@@ -212,10 +211,7 @@ export default async function HomePage() {
                   icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>,
                   label: 'Adresse', val: 'Bahnhofstrasse 2<br/>CH-9475 Sevelen, Schweiz', html: true
                 },
-                {
-                  icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.44 2 2 0 0 1 3.59 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.73 16z"/></svg>,
-                  label: 'Telefon', val: '+41 / 81 756 74 55'
-                },
+        
                 {
                   icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>,
                   label: 'Mobile', val: '+41 / 78 606 61 05'

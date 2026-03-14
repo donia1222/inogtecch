@@ -8,17 +8,35 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
+const API = process.env.NEXT_PUBLIC_API_URL || 'https://web.lweb.ch/inotec/api'
+
 export default function Navbar() {
   const pathname = usePathname()
 
   const [isDay, setIsDay] = useState(true)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [logoTitel, setLogoTitel] = useState('iNOTEC')
+  const [logoSub, setLogoSub] = useState('ENGINEERING')
+  const [navStyles, setNavStyles] = useState({})
 
   /* ── Aplicar tema guardado al montar ── */
   useEffect(() => {
     const saved = localStorage.getItem('theme') === 'day'  // noche por defecto
     setIsDay(saved)
     applyTheme(saved)
+    fetch(`${API}/hero.php`)
+      .then(r => r.json())
+      .then(d => { if (d?.eyebrow) setLogoTitel(d.eyebrow); if (d?.eyebrow_sub) setLogoSub(d.eyebrow_sub) })
+      .catch(() => {})
+    fetch(`${API}/field_styles.php`)
+      .then(r => r.json())
+      .then(styles => {
+        const ns = {}
+        if (styles['nav.inotec']) ns.inotec = styles['nav.inotec']
+        if (styles['nav.engineering']) ns.engineering = styles['nav.engineering']
+        setNavStyles(ns)
+      })
+      .catch(() => {})
   }, [])
 
   /* ── Cerrar menú al cambiar de ruta ── */
@@ -77,10 +95,10 @@ export default function Navbar() {
       <nav>
         {/* Logo */}
         <div className="nav-logo">
-          <Link href="/" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '.6rem' }}>
-            <img src="/assets/p1_img4.png" alt="iNOTEC" style={{ height: '30px', objectFit: 'contain' }} />
-            <span style={{ display: 'inline-flex', alignItems: 'flex-start', gap: '0', fontSize: '12px', fontWeight: 600, color: 'var(--muted)', letterSpacing: '.25em', textTransform: 'uppercase', lineHeight: 1, fontFamily: "'Separat', sans-serif" }}>
-              <span style={{ color: 'var(--red)', fontSize: '10px', lineHeight: '0.7', marginRight: '1px' }}>&#9660;</span>ENGINEERING
+          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
+            <img src="/assets/p1_img4.png" alt="iNOTEC" style={{ height: '16px', objectFit: 'contain' }} />
+            <span style={{ display: 'inline-flex', alignItems: 'flex-start', gap: '0', fontSize: '16px', fontWeight: 600, color: 'var(--muted)', letterSpacing: '.25em', textTransform: 'uppercase', lineHeight: 1, fontFamily: "'Separat', sans-serif" }}>
+              <span style={{ color: 'var(--red)', fontSize: '11px', lineHeight: '0.7', marginRight: '1px' }}>&#9660;</span>{logoSub}
             </span>
           </Link>
         </div>

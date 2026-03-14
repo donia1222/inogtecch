@@ -3,23 +3,32 @@
    Componente de servidor (sin hooks)
    ───────────────────────────────────────────────────────── */
 import FooterModals from '@/components/FooterModals'
+import { apiGet } from '@/lib/api'
 
-export default function Footer() {
+export default async function Footer() {
+  let titel = 'iNOTEC'
+  let sub = 'ENGINEERING'
+  try {
+    const hero = await apiGet('hero.php')
+    if (hero?.eyebrow) titel = hero.eyebrow
+    if (hero?.eyebrow_sub) sub = hero.eyebrow_sub
+  } catch {}
+
   return (
     <footer>
       <div className="container">
         <div className="footer-inner">
           {/* Logo en texto */}
           <div className="footer-logo" style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
-            <span style={{ color: 'var(--red)' }}>iNOTEC</span>
-            <span style={{ display: 'inline-flex', alignItems: 'flex-start', gap: '0', fontSize: '11px', fontWeight: 600, color: 'var(--muted)', letterSpacing: '.25em', textTransform: 'uppercase', lineHeight: 1, fontFamily: "'Separat', sans-serif" }}>
-              <span style={{ color: 'var(--red)', fontSize: '9px', lineHeight: '0.7', marginRight: '1px' }}>&#9660;</span>ENGINEERING
+            <img src="/assets/p1_img4.png" alt="iNOTEC" style={{ height: '16px', objectFit: 'contain' }} />
+            <span style={{ display: 'inline-flex', alignItems: 'flex-start', gap: '0', fontSize: '16px', fontWeight: 600, color: 'var(--muted)', letterSpacing: '.25em', textTransform: 'uppercase', lineHeight: 1, fontFamily: "'Separat', sans-serif" }}>
+              <span style={{ color: 'var(--red)', fontSize: '11px', lineHeight: '0.7', marginRight: '1px' }}>&#9660;</span>{sub}
             </span>
           </div>
 
           {/* Información de copyright */}
           <div className="footer-copy">
-            © 2026 iNOTEC-Engineering · Bahnhofstrasse 2 · CH-9475 Sevelen
+            © 2026 {titel}-{sub} · Bahnhofstrasse 2 · CH-9475 Sevelen
           </div>
 
           {/* Links rápidos */}

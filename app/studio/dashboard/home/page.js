@@ -39,7 +39,6 @@ function HeroTab() {
               <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#e02020', flexShrink: 0 }}></span>
               {data.badge_text}
             </div>
-            <p style={{ fontSize: '.7rem', color: '#555', margin: '0 0 .3rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.1em' }}>{data.eyebrow}</p>
             <h2 style={{ margin: '0 0 .5rem', fontSize: '1.6rem', fontWeight: 900, color: '#fff', lineHeight: 1.2 }}>
               {data.title_line1}<br /><span style={{ color: '#e02020' }}>{data.title_line2_red}</span>
             </h2>
@@ -80,7 +79,6 @@ function HeroTab() {
         <div className="ve-card" style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: '12px', padding: '1.2rem', display: 'flex', flexDirection: 'column', gap: '.9rem' }}>
           <SectionHeader title="Badge & Titel" />
           <Field label="Badge-Text" styleKey="hero.badge"><Input value={data.badge_text} onChange={e => set('badge_text', e.target.value)} /></Field>
-          <Field label="Eyebrow" styleKey="hero.eyebrow"><Input value={data.eyebrow} onChange={e => set('eyebrow', e.target.value)} /></Field>
           <Row>
             <Field label="Titel Zeile 1" styleKey="hero.title1"><Input value={data.title_line1} onChange={e => set('title_line1', e.target.value)} /></Field>
             <Field label="Titel Zeile 2 (rot)" styleKey="hero.title2"><Input value={data.title_line2_red} onChange={e => set('title_line2_red', e.target.value)} /></Field>
@@ -92,8 +90,8 @@ function HeroTab() {
           <SectionHeader title="Statistiken" />
           {[1, 2, 3].map(n => (
             <Row key={n}>
-              <Field label={`Wert ${n}`} styleKey={`hero.stat${n}_val`}><Input value={data[`stat${n}_val`]} onChange={e => set(`stat${n}_val`, e.target.value)} placeholder="20+" /></Field>
-              <Field label={`Label ${n}`} styleKey={`hero.stat${n}_lbl`}><Input value={data[`stat${n}_lbl`]} onChange={e => set(`stat${n}_lbl`, e.target.value)} placeholder="Jahre Erfahrung" /></Field>
+              <Field label={`Wert ${n}`}><Input value={data[`stat${n}_val`]} onChange={e => set(`stat${n}_val`, e.target.value)} placeholder="20+" /></Field>
+              <Field label={`Label ${n}`}><Input value={data[`stat${n}_lbl`]} onChange={e => set(`stat${n}_lbl`, e.target.value)} placeholder="Jahre Erfahrung" /></Field>
             </Row>
           ))}
         </div>

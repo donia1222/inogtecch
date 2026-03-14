@@ -1,30 +1,28 @@
-import { apiGet } from '@/lib/api'
+'use client'
+import { useEffect, useState } from 'react'
 
-export default async function FieldStyleInjector() {
-  let styles = {}
-  try {
-    const res = await apiGet('field_styles.php')
-    if (res && typeof res === 'object' && !Array.isArray(res)) {
-      styles = res
-    }
-  } catch { return null }
+const API = process.env.NEXT_PUBLIC_API_URL || 'https://web.lweb.ch/inotec/api'
 
-  if (!Object.keys(styles).length) return null
+export default function FieldStyleInjector() {
+  const [css, setCss] = useState('')
 
-  // Generar CSS con data-attributes
-  // Cada elemento en el frontend tendra data-sk="hero.title" etc.
-  const rules = []
-  for (const [key, s] of Object.entries(styles)) {
-    const props = []
-    if (s.font_size)   props.push(`font-size: ${s.font_size} !important`)
-    if (s.font_color)  props.push(`color: ${s.font_color} !important`)
-    if (s.font_family) props.push(`font-family: ${s.font_family} !important`)
-    if (props.length) {
-      rules.push(`[data-sk="${key}"] { ${props.join('; ')} }`)
-    }
-  }
+  useEffect(() => {
+    fetch(`${API}/field_styles.php`)
+      .then(r => r.json())
+      .then(styles => {
+        if (!styles || typeof styles !== 'object' || Array.isArray(styles)) return
+        const rules = []
+        for (const [key, s] of Object.entries(styles)) {
+          const props = []
+          if (s.font_size) props.push(`font-size: ${s.font_size} !important`)
+          if (s.font_family) props.push(`font-family: ${s.font_family} !important`)
+          if (props.length) rules.push(`[data-sk="${key}"] { ${props.join('; ')} }`)
+        }
+        if (rules.length) setCss(rules.join('\n'))
+      })
+      .catch(() => {})
+  }, [])
 
-  if (!rules.length) return null
-
-  return <style dangerouslySetInnerHTML={{ __html: rules.join('\n') }} />
+  if (!css) return null
+  return <style dangerouslySetInnerHTML={{ __html: css }} />
 }

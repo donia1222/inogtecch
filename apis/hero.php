@@ -27,7 +27,7 @@ if ($method === 'PUT') {
     $body = getBody();
 
     $fields = [
-        'badge_text', 'eyebrow', 'title_line1', 'title_line2_red',
+        'badge_text', 'eyebrow', 'eyebrow_sub', 'title_line1', 'title_line2_red',
         'desc_text', 'btn_primary_text', 'btn_outline_text', 'btn_outline_href',
         'stat1_val', 'stat1_lbl', 'stat2_val', 'stat2_lbl', 'stat3_val', 'stat3_lbl',
         'hero_main_img', 'hero_main_alt', 'hero_img_label',

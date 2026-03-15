@@ -8,11 +8,21 @@ import { apiGet } from '@/lib/api'
 export default async function Footer() {
   let titel = 'iNOTEC'
   let sub = 'ENGINEERING'
+  let footerData = null
   try {
-    const hero = await apiGet('hero.php')
+    const [hero, ft] = await Promise.all([
+      apiGet('hero.php').catch(() => null),
+      apiGet('footer.php').catch(() => null),
+    ])
     if (hero?.eyebrow) titel = hero.eyebrow
     if (hero?.eyebrow_sub) sub = hero.eyebrow_sub
+    footerData = ft
   } catch {}
+
+  const address1 = footerData?.address_line1 ?? 'Bahnhofstrasse 2'
+  const address2 = footerData?.address_line2 ?? 'CH-9475 Sevelen'
+  const email    = footerData?.email ?? 'inotec-inotec@bluewin.ch'
+  const mobile   = footerData?.mobile ?? '+41 / 78 606 61 05'
 
   return (
     <footer>
@@ -27,13 +37,13 @@ export default async function Footer() {
 
           {/* Información de copyright */}
           <div className="footer-copy">
-            © 2026 {titel}-{sub} · Bahnhofstrasse 2 · CH-9475 Sevelen
+            © 2026 {titel}-{sub} · {address1} · {address2}
           </div>
 
           {/* Links rápidos */}
           <div className="footer-links">
-            <a href="mailto:inotec-inotec@bluewin.ch">E-Mail</a>
-            <a href="tel:+41817567455">Telefon</a>
+            <a href={`mailto:${email}`}>E-Mail</a>
+            <a href={`tel:${mobile.replace(/[\s\/]/g, '')}`}>Telefon</a>
             <FooterModals />
             <a href="/studio">Admin</a>
             <a href="https://lweb.ch" target="_blank" rel="noopener noreferrer" style={{ opacity: .45, fontSize: '.72rem' }}>Design: lweb.ch</a>

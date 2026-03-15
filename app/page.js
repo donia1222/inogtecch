@@ -9,20 +9,21 @@ import { apiGet } from '@/lib/api'
 export const revalidate = 60 // ISR: revalidar cada 60 s
 
 async function getHomeData() {
-  const [hero, ticker, erfahrungRaw, companies, specialties] = await Promise.all([
+  const [hero, ticker, erfahrungRaw, companies, specialties, footer] = await Promise.all([
     apiGet('hero.php').catch(() => null),
     apiGet('ticker.php').catch(() => []),
     apiGet('erfahrung.php').catch(() => null),
     apiGet('erfahrung_companies.php').catch(() => []),
     apiGet('erfahrung_specialties.php').catch(() => []),
+    apiGet('footer.php').catch(() => null),
   ])
   // erfahrung.php devuelve { content:{...}, companies, specialties }
   const erfahrung = erfahrungRaw?.content ?? erfahrungRaw
-  return { hero, ticker, erfahrung, companies, specialties }
+  return { hero, ticker, erfahrung, companies, specialties, footer }
 }
 
 export default async function HomePage() {
-  const { hero, ticker, erfahrung, companies, specialties } = await getHomeData()
+  const { hero, ticker, erfahrung, companies, specialties, footer } = await getHomeData()
 
   return (
     <>
@@ -199,30 +200,28 @@ export default async function HomePage() {
             <div className="contact-info fade-in">
               <span className="tag">Kontakt</span>
               <div className="divider"></div>
-              <h2 className="section-title">Ihr Projekt beginnt hier.</h2>
+              <h2 className="section-title">{footer?.contact_title ?? 'Ihr Projekt beginnt hier.'}</h2>
               <p>
-                Wenn Sie Fragen oder Anregungen haben, schreiben Sie uns oder rufen Sie uns an.
-                Ihre Kontaktaufnahme freut uns. Wir begleiten Ihr Projekt von der Idee bis zum
-                fertigen Produkt — individuell, kompetent und termingerecht.
+                {footer?.contact_text ?? 'Wenn Sie Fragen oder Anregungen haben, schreiben Sie uns oder rufen Sie uns an. Ihre Kontaktaufnahme freut uns. Wir begleiten Ihr Projekt von der Idee bis zum fertigen Produkt — individuell, kompetent und termingerecht.'}
               </p>
 
               {[
                 {
                   icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>,
-                  label: 'Adresse', val: 'Bahnhofstrasse 2<br/>CH-9475 Sevelen, Schweiz', html: true
+                  label: 'Adresse', val: `${footer?.address_line1 ?? 'Bahnhofstrasse 2'}<br/>${footer?.address_line2 ?? 'CH-9475 Sevelen, Schweiz'}`, html: true
                 },
-        
+
                 {
                   icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>,
-                  label: 'Mobile', val: '+41 / 78 606 61 05'
+                  label: 'Mobile', val: footer?.mobile ?? '+41 / 78 606 61 05'
                 },
                 {
                   icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>,
-                  label: 'Website', val: 'www.inotecengineering.ch'
+                  label: 'Website', val: footer?.website ?? 'www.inotecengineering.ch'
                 },
                 {
                   icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>,
-                  label: 'E-Mail', val: 'inotec-inotec@bluewin.ch'
+                  label: 'E-Mail', val: footer?.email ?? 'inotec-inotec@bluewin.ch'
                 },
               ].map(({ icon, label, val, html }) => (
                 <div key={label} className="c-detail">
@@ -238,7 +237,7 @@ export default async function HomePage() {
               ))}
 
               <ul className="contact-services">
-                {[
+                {(footer?.services ?? [
                   'Erstellung von Konzepten und Studien',
                   'Konzept Realisierung bis hin zur Produktionszeichnung und Stückliste',
                   'Erstellung von 3D Daten ab 2D Zeichnung',
@@ -246,7 +245,7 @@ export default async function HomePage() {
                   '3D Explosionszeichnungen',
                   'FEM Berechnungen',
                   'Auf Wunsch inklusive Prototypenproduktion und Vertrieb',
-                ].map(s => <li key={s}>{s}</li>)}
+                ]).map(s => <li key={s}>{s}</li>)}
               </ul>
             </div>
 

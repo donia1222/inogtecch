@@ -413,8 +413,28 @@ CREATE TABLE IF NOT EXISTS contact_messages (
     INDEX idx_read    (is_read)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- ───────────────────────────────────────────────────────────────
+--  FOOTER CONTENT — Datos del pie de página y sección Kontakt
+-- ───────────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS footer_content (
+    id             INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    contact_title  VARCHAR(500) NOT NULL DEFAULT 'Ihr Projekt beginnt hier.',
+    contact_text   TEXT,
+    address_line1  VARCHAR(255) NOT NULL DEFAULT 'Bahnhofstrasse 2',
+    address_line2  VARCHAR(255) NOT NULL DEFAULT 'CH-9475 Sevelen, Schweiz',
+    mobile         VARCHAR(100) NOT NULL DEFAULT '+41 / 78 606 61 05',
+    website        VARCHAR(255) NOT NULL DEFAULT 'www.inotecengineering.ch',
+    email          VARCHAR(255) NOT NULL DEFAULT 'inotec-inotec@bluewin.ch',
+    services       JSON
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO footer_content (id, contact_text, services) VALUES (1,
+    'Wenn Sie Fragen oder Anregungen haben, schreiben Sie uns oder rufen Sie uns an. Ihre Kontaktaufnahme freut uns. Wir begleiten Ihr Projekt von der Idee bis zum fertigen Produkt — individuell, kompetent und termingerecht.',
+    '["Erstellung von Konzepten und Studien","Konzept Realisierung bis hin zur Produktionszeichnung und Stückliste","Erstellung von 3D Daten ab 2D Zeichnung","3D Animationen und 3D Visualisierung","3D Explosionszeichnungen","FEM Berechnungen","Auf Wunsch inklusive Prototypenproduktion und Vertrieb"]'
+) ON DUPLICATE KEY UPDATE id = id;
+
 -- ═══════════════════════════════════════════════════════════════
 --  FIN DEL SCRIPT
---  Tablas creadas: 15
+--  Tablas creadas: 16
 --  Registros iniciales: todos los datos actuales de la web
 -- ═══════════════════════════════════════════════════════════════

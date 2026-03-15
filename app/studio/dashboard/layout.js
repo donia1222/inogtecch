@@ -74,10 +74,7 @@ export default function DashboardLayout({ children }) {
             🌐 Website öffen
           </a>
           <div className="s-tabs-right">
-            <button onClick={() => setShowNews(true)} style={{ background: 'rgba(224,32,32,.1)', border: '1px solid rgba(224,32,32,.25)', color: '#e02020', fontWeight: 700, fontSize: '.75rem', padding: '.25rem .7rem', borderRadius: '999px', cursor: 'pointer', letterSpacing: '.03em' }}>
-              ✦ Neu
-            </button>
-            <button onClick={handleLogout} className="s-view-tab s-view-tab-logout">
+            <button onClick={handleLogout} className="s-view-tab s-view-tab-logout" style={{ fontSize: '1.3rem', padding: '.3rem .7rem' }}>
               ⏻
             </button>
           </div>

@@ -367,6 +367,124 @@ function ErfahrungTab() {
 }
 
 /* ════════════════════════════════════════════════════════════
+   TAB: FOOTER
+════════════════════════════════════════════════════════════ */
+function FooterTab() {
+  const [data, setData]       = useState(null)
+  const [saving, setSaving]   = useState(false)
+  const [newSvc, setNewSvc]   = useState('')
+  const [toast, show]         = useToast()
+
+  useEffect(() => { apiGet('footer.php').then(setData).catch(() => {}) }, [])
+  function set(k, v) { setData(d => ({ ...d, [k]: v })) }
+
+  async function save() {
+    setSaving(true)
+    try { await apiPut('footer.php', data); show('Footer gespeichert ✓') }
+    catch { show('Fehler', 'err') }
+    finally { setSaving(false) }
+  }
+
+  function addService() {
+    if (!newSvc.trim()) return
+    set('services', [...(data.services || []), newSvc.trim()])
+    setNewSvc('')
+  }
+  function removeService(i) {
+    set('services', (data.services || []).filter((_, idx) => idx !== i))
+  }
+  function moveService(i, dir) {
+    const arr = [...(data.services || [])]
+    const j = i + dir
+    if (j < 0 || j >= arr.length) return
+    ;[arr[i], arr[j]] = [arr[j], arr[i]]
+    set('services', arr)
+  }
+
+  if (!data) return <div className="s-loading">Wird geladen…</div>
+
+  return (
+    <>
+      <Toast {...toast} />
+
+      {/* ── Visual preview ── */}
+      <div className="ve-preview" style={{ background: '#0a0a0a', border: '1px solid #1a1a1a', borderRadius: '16px', padding: '1.5rem', marginBottom: '2rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+          <div>
+            <div style={{ fontSize: '.65rem', fontWeight: 700, color: '#e02020', letterSpacing: '.12em', textTransform: 'uppercase', marginBottom: '.4rem' }}>Kontakt</div>
+            <h3 style={{ margin: '0 0 .6rem', fontSize: '1.2rem', fontWeight: 800, color: '#fff' }}>{data.contact_title}</h3>
+            <p style={{ fontSize: '.75rem', color: '#555', lineHeight: 1.6 }}>{data.contact_text}</p>
+          </div>
+          <div style={{ fontSize: '.75rem', color: '#666', display: 'flex', flexDirection: 'column', gap: '.5rem' }}>
+            <div><span style={{ color: '#888', fontWeight: 600 }}>Adresse:</span> {data.address_line1}, {data.address_line2}</div>
+            <div><span style={{ color: '#888', fontWeight: 600 }}>Mobile:</span> {data.mobile}</div>
+            <div><span style={{ color: '#888', fontWeight: 600 }}>Website:</span> {data.website}</div>
+            <div><span style={{ color: '#888', fontWeight: 600 }}>E-Mail:</span> {data.email}</div>
+            {data.services?.length > 0 && (
+              <div style={{ marginTop: '.5rem', borderTop: '1px solid #1a1a1a', paddingTop: '.5rem' }}>
+                {data.services.map((s, i) => (
+                  <div key={i} style={{ color: '#555', fontSize: '.7rem', padding: '.1rem 0' }}>· {s}</div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Edit form ── */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+        <div className="ve-card" style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: '12px', padding: '1.2rem', display: 'flex', flexDirection: 'column', gap: '.9rem' }}>
+          <SectionHeader title="Kontakt-Texte" />
+          <Field label="Titel" styleKey="footer.title"><Input value={data.contact_title} onChange={e => set('contact_title', e.target.value)} /></Field>
+          <Field label="Beschreibung" styleKey="footer.text"><Textarea value={data.contact_text} onChange={e => set('contact_text', e.target.value)} rows={4} /></Field>
+        </div>
+
+        <div className="ve-card" style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: '12px', padding: '1.2rem', display: 'flex', flexDirection: 'column', gap: '.9rem' }}>
+          <SectionHeader title="Kontaktdaten" />
+          <Row>
+            <Field label="Adresse Zeile 1"><Input value={data.address_line1} onChange={e => set('address_line1', e.target.value)} /></Field>
+            <Field label="Adresse Zeile 2"><Input value={data.address_line2} onChange={e => set('address_line2', e.target.value)} /></Field>
+          </Row>
+          <Field label="Mobile"><Input value={data.mobile} onChange={e => set('mobile', e.target.value)} /></Field>
+          <Field label="Website"><Input value={data.website} onChange={e => set('website', e.target.value)} /></Field>
+          <Field label="E-Mail"><Input value={data.email} onChange={e => set('email', e.target.value)} /></Field>
+        </div>
+      </div>
+
+      {/* ── Services list ── */}
+      <div className="ve-card" style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: '12px', padding: '1.2rem', marginTop: '1.5rem' }}>
+        <SectionHeader title={`Dienstleistungen (${(data.services || []).length})`} sub="Liste der Dienstleistungen im Kontaktbereich" />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '.4rem', marginBottom: '1rem' }}>
+          {(data.services || []).map((svc, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '.5rem', padding: '.6rem .9rem', background: 'rgba(255,255,255,.06)', border: '1px solid rgba(255,255,255,.1)', borderRadius: '8px' }}>
+              <span style={{ color: '#e02020', fontSize: '.85rem' }}>·</span>
+              <span style={{ flex: 1, fontSize: '.85rem', color: 'inherit', fontWeight: 500 }}>{svc}</span>
+              <button onClick={() => moveService(i, -1)} style={{ background: 'none', border: 'none', color: '#555', cursor: 'pointer', fontSize: '.8rem', padding: '2px 4px' }} title="Nach oben">↑</button>
+              <button onClick={() => moveService(i, 1)} style={{ background: 'none', border: 'none', color: '#555', cursor: 'pointer', fontSize: '.8rem', padding: '2px 4px' }} title="Nach unten">↓</button>
+              <button onClick={() => removeService(i)} style={{ background: 'none', border: 'none', color: '#e02020', cursor: 'pointer', fontSize: '.9rem', padding: '2px 6px' }} title="Löschen">×</button>
+            </div>
+          ))}
+        </div>
+        <div style={{ display: 'flex', gap: '.6rem' }}>
+          <input value={newSvc} onChange={e => setNewSvc(e.target.value)} onKeyDown={e => e.key === 'Enter' && addService()}
+            placeholder="Neue Dienstleistung… (Enter)"
+            className="ve-input" style={{ flex: 1, background: '#141414', border: '1px solid #222', borderRadius: '8px', padding: '.6rem .9rem', color: '#fff', fontSize: '.85rem', outline: 'none' }} />
+          <button onClick={addService} style={{ padding: '.65rem 1.1rem', borderRadius: '8px', border: 'none', background: '#e02020', color: '#fff', fontWeight: 700, fontSize: '.95rem', cursor: 'pointer' }}>+ Hinzufügen</button>
+        </div>
+      </div>
+
+      <div style={{ marginTop: '1.5rem' }}>
+        <button onClick={save} disabled={saving} style={{
+          padding: '.85rem 2.5rem', borderRadius: '10px', border: 'none',
+          background: '#e02020', color: '#fff', fontWeight: 700, fontSize: '.95rem',
+          cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? .6 : 1,
+        }}>{saving ? 'Wird gespeichert…' : 'Footer speichern'}</button>
+      </div>
+    </>
+  )
+}
+
+/* ════════════════════════════════════════════════════════════
    MAIN
 ════════════════════════════════════════════════════════════ */
 export default function HomeEditorPage() {
@@ -378,15 +496,19 @@ export default function HomeEditorPage() {
     <FieldStylesProvider>
     <div style={{ maxWidth: '1000px' }}>
       <h1 className="s-page-title">Startseite</h1>
-      <p className="s-page-sub">Hero, Ticker & Erfahrung — visuell bearbeiten</p>
+      <p className="s-page-sub">Hero, Ticker, Erfahrung & Footer — visuell bearbeiten</p>
       <div className="s-tabs" style={{ marginBottom: '2rem' }}>
-        {[['hero', '🏠 Hero'], ['ticker', '⚡ Ticker'], ['erfahrung', '🏢 Erfahrung']].map(([k, l]) => (
-          <button key={k} className={`s-tab${tab === k ? ' s-active' : ''}`} onClick={() => setTab(k)}>{l}</button>
+        {[['hero', '🏠 Hero'], ['ticker', '⚡ Ticker'], ['erfahrung', '🏢 Erfahrung'], ['footer', '📋 Footer']].map(([k, l]) => (
+          <button key={k} className={`s-tab${tab === k ? ' s-active' : ''}`} onClick={() => setTab(k)} style={{ position: 'relative' }}>
+            {l}
+            {k === 'footer' && <span style={{ position: 'absolute', top: '-6px', right: '-6px', background: '#e02020', color: '#fff', fontSize: '.55rem', fontWeight: 800, padding: '1px 5px', borderRadius: '999px', letterSpacing: '.04em', lineHeight: '1.4' }}>NEU</span>}
+          </button>
         ))}
       </div>
       {tab === 'hero'      && <HeroTab />}
       {tab === 'ticker'    && <TickerTab />}
       {tab === 'erfahrung' && <ErfahrungTab />}
+      {tab === 'footer'    && <FooterTab />}
     </div>
     </FieldStylesProvider>
   )
